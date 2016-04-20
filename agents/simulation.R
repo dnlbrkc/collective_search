@@ -4,6 +4,8 @@ rm(list=ls())
 v <- as.integer(commandArgs(TRUE)[1])
 
 #Load pre-computed data
+#load strategies
+source("strategies.R")
 #set working directory to "environments" to load fitness matrices
 setwd("..")
 setwd("environments")
@@ -146,10 +148,10 @@ for (k in kVec){
             agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = max(range), minRange=min(range))}
       }else if (strat ==6){#6. hill climbing 
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = max(range), minRange=min(range))}
+            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 0, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = max(range), minRange=min(range))}
       } else {#7. random search
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = max(range), minRange=min(range))}  
+            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = max(range), minRange=min(range))}  
         }
       }
     total_NK[,strat] <- total_NK[,strat] +  sapply(1:tsteps, function(x) mean(agents[[x]][,2])) #sum performance over all landscapes
