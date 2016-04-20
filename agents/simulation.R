@@ -1,24 +1,13 @@
 rm(list=ls())
-setwd("~/COLLECTIVE_SEARCH")
 
-both <- list()
-z=0
-RAD = 30
-nets <- c("fullyconnected.Rdata","lattice.Rdata")
-setwd("~/COLLECTIVE_SEARCH")
-for(netname in nets){
-
-
-setwd("~/COLLECTIVE_SEARCH")
-z=z+1
-load(netname)
-contacts <- network
-
-
-
-
+#set working directory to "environments" to load fitness matrices
+setwd("..")
+setwd("environments")
 load("environments.Rdata")
 source("functions.R") #environment functions
+
+
+#MODEL PARAMETERS
 
 #list of 2D environments to loop through
 environmentList <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")
@@ -31,148 +20,125 @@ n.strat <- 5 #imitation, hybridA, hybridB,local search, random search
 n.agents=100; tsteps=200
 samplesize <- 3 #change sample size
 
+
+#replication ID
+v <- as.integer(commandArgs(TRUE)[1])
+
+
+finalResults <- list() #final results
+z=0 #network counter, where z /in {1,2}
+
+RAD = 30 #search radius
+nets <- c("fullyconnected.Rdata","lattice.Rdata") #connections for each agent
+
+#todo: loop through network types within the environment loop
+for(netname in nets){
+
+
+z=z+1
+load(netname)
+
 # perf.time <- matrix(0,ncol=n_envs,nrow=tsteps)
 perf.time <- array(dim=c(tsteps,n_envs+2,n.strat))
 
-#replication ID
-v <- as.integer( commandArgs(TRUE)[1])
-
-#vector for storing results
-# perf.time<-matrix(NA,ncol=n_envs+2,nrow=tsteps)
 
 #A) 2D rugged landscapes
-for (q in 1:length(fitness)){
+for (env in 1:length(fitness)){
 	#1. Initialize random starting position for n.agents
 	agents <- list()
 	choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
-	payoffs<- apply(choices, 1, function(x) fitness[[q]][x[1],x[2]]) #look up payoff from fitness matrix
+	payoffs<- apply(choices, 1, function(x) fitness[[env]][x[1],x[2]]) #look up payoff from fitness matrix
 	#combine choices and payoffs in matrix row: [x, y, payoff], col: n.agents
 	agents[[1]] <- cbind(choices,payoffs)  #initialization
 
+	#Todo: define each strategy as a function
 	for (strat in 1:n.strat){
 	
+	#1.IMITATE THE BEST
 	if(strat==1){  
-	#IMITATE THE BEST
-	for (i in 2:tsteps){
-	
-	agents[[i]]<-agents[[i-1]] #carry over previous choices
-	samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+		for (i in 2:tsteps){
+			agents[[i]]<-agents[[i-1]] #carry over previous choices
+			samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
+			ind.learn<-vector(length=n.agents)
+			k=0
+			for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
+				agents[[i]][j,]<-agents[[i]][samples[best,j],] 
+				if(agents[[i]][j,3]<=agents[[i-1]][j,3]){
+					ind.learn[j]<-k
+				}
+			}
+			ind.learn<-ind.learn[ind.learn!=0] 
 
+			#switch if better
+			temp <- agents[[i]]
 
-#best member rule
-	#if(strat==1){
+			#determine who's switching to the new option and who is keeping the old option
+			switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
+			not.switching<-setdiff(1:100,switching[switching!=0])
 
-  ind.learn<-vector(length=n.agents)
-  k=0
-  for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
-  agents[[i]][j,]<-agents[[i]][samples[best,j],]; 
-  if(agents[[i]][j,3]<=agents[[i-1]][j,3]){ind.learn[j]<-k}
-  }
-  ind.learn<-ind.learn[ind.learn!=0] 
-
-#switch if better
-temp <- agents[[i]]
-
-# if(length(ind.learn)>=1){
-# 
-# for (n in c(ind.learn)){
-# 
-# #radius based search + payoff store in temp
-#  which.digit <- sample(c(1:2),1) 
-#   radius <- as.numeric(temp[n,c(which.digit)])
-#   vec_radius <- 1:RAD
-#   values <- c(radius + vec_radius,radius - vec_radius)
-#   # values <- c(radius + vec_radius,radius - vec_radius)
-#   values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-#   values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-#   temp[n,which.digit] <- sample(values,1)
-#   temp[n,3] <- environment[temp[n,1],temp[n,2] ] 
-# 
-# 
-# 
-# 
-# 
-# }
-# 
-# 
-# agents[[i]][ind.learn,] <- temp[ind.learn,]
-# }
-
-#determine who's switching to the new option and who is keeping the old option
-switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-not.switching<-setdiff(1:100,switching[switching!=0])
-
-#those who are not switching carry their option from the previous round
-agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
-
+			#those who are not switching carry their option from the previous round
+			agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 
 }
+	#2. HYBRID A
 	} else if (strat==2){
-	#HYBRID A
-	for (i in 2:tsteps){
-	    
-	    agents[[i]]<-agents[[i-1]] #carry over previous choices
-	    samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
-	    
-	    
-	    #best member rule
-	    #if(strat==1){
-	    
-	    ind.learn<-vector(length=n.agents)
-	    k=0
-	    for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
-	    agents[[i]][j,]<-agents[[i]][samples[best,j],]; 
-	    if(agents[[i]][j,3]<=agents[[i-1]][j,3]){ind.learn[j]<-k}
-	    }
-	    ind.learn<-ind.learn[ind.learn!=0] 
-	    
-	    #switch if better
-	    temp <- agents[[i]]
-	    
-	    if(length(ind.learn)>=1){
-	      
-	      for (n in c(ind.learn)){
-	        
-	        #radius based search + payoff store in temp
-	        which.digit <- sample(c(1:2),1) 
-	        radius <- as.numeric(temp[n,c(which.digit)])
-	        vec_radius <- 1:RAD
-	        values <- c(radius + vec_radius,radius - vec_radius)
-	        # values <- c(radius + vec_radius,radius - vec_radius)
-	        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-	        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-	        temp[n,which.digit] <- sample(values,1)
-	        temp[n,3] <- fitness[[q]][temp[n,1],temp[n,2] ] 
-	        
-	        
-	        
-	        
-	        
-	      }
-	      
-	      
-	      agents[[i]][ind.learn,] <- temp[ind.learn,]
-	    }
-	    
-	    #determine who's switching to the new option and who is keeping the old option
-	    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-	    not.switching<-setdiff(1:100,switching[switching!=0])
-	    
-	    #those who are not switching carry their option from the previous round
-	    agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
-	    
-	    
-	  }
+	
+		for (i in 2:tsteps){
+		    
+		    agents[[i]]<-agents[[i-1]] #carry over previous choices
+		    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
+		    
+		    #best member rule
+		    
+		    ind.learn<-vector(length=n.agents)
+		    k=0
+		    for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
+		    agents[[i]][j,]<-agents[[i]][samples[best,j],]; 
+		    if(agents[[i]][j,3]<=agents[[i-1]][j,3]){ind.learn[j]<-k}
+		    }
+		    ind.learn<-ind.learn[ind.learn!=0] 
+		    
+		    #switch if better
+		    temp <- agents[[i]]
+		    
+		    if(length(ind.learn)>=1){
+		      
+		      for (n in c(ind.learn)){
+		        
+		        #radius based search + payoff store in temp
+		        which.digit <- sample(c(1:2),1) 
+		        radius <- as.numeric(temp[n,c(which.digit)])
+		        vec_radius <- 1:RAD
+		        values <- c(radius + vec_radius,radius - vec_radius)
+		        # values <- c(radius + vec_radius,radius - vec_radius)
+		        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
+		        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
+		        temp[n,which.digit] <- sample(values,1)
+		        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] 
+		        
+		      }
+		      
+		      
+		      agents[[i]][ind.learn,] <- temp[ind.learn,]
+		    }
+		    
+		    #determine who's switching to the new option and who is keeping the old option
+		    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
+		    not.switching<-setdiff(1:100,switching[switching!=0])
+		    
+		    #those who are not switching carry their option from the previous round
+		    agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
+		    
+		    
+		  }
 	} else if (strat ==3) { 
-	#HYBRID B 20% random search
+	#3. HYBRID B 20% random search
 	for (i in 2:tsteps){
 	    
 	    agents[[i]]<-agents[[i-1]] #carry over previous choices
-	    samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
-	    
+	    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
 	    
 	    #best member rule
-	    #if(strat==1){
 	    
 	    ind.learn<-vector(length=n.agents)
 	    k=0
@@ -199,14 +165,12 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
 	        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
 	        temp[n,which.digit] <- sample(values,1)
-	        temp[n,3] <- fitness[[q]][temp[n,1],temp[n,2] ] 
+	        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] 
 	        } else {
 	        temp[n,1:2] <- sample(range,2)
-	        temp[n,3] <- fitness[[q]][temp[n,1],temp[n,2] ]
+	        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ]
 	        }
-	        
-	        
-	        
+
 	        
 	      }
 	      
@@ -224,7 +188,8 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	    
 	  }
 	} else if (strat ==4){
-	#LOCAL
+	#4. LOCAL 
+	
 	for (i in 2:tsteps){
 	    
 	    agents[[i]]<-agents[[i-1]] #carry over previous choices
@@ -234,31 +199,25 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	   
 	    temp <- agents[[i]]
 	    
-	    if(length(ind.learn)>=1){
-	      
-	      for (n in c(ind.learn)){
-	        
-	        #radius based search + payoff store in temp
-	        which.digit <- sample(c(1:2),1) 
-	        radius <- as.numeric(temp[n,c(which.digit)])
-	        vec_radius <- 1:RAD
-	        values <- c(radius + vec_radius,radius - vec_radius)
-	        # values <- c(radius + vec_radius,radius - vec_radius)
-	        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-	        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-	        temp[n,which.digit] <- sample(values,1)
-	        temp[n,3] <- fitness[[q]][temp[n,1],temp[n,2] ] 
-	        
-	        
-	        
-	        
-	        
-	      }
-	      
-	      
-	      agents[[i]][ind.learn,] <- temp[ind.learn,]
-	    }
-	    
+
+		for (n in c(ind.learn)){
+			#radius based search + payoff store in temp
+			#each solution (x,y) consists of two digits
+			which.digit <- sample(c(1:2),1) #randomly sample one of the digits to modify
+			loc <- as.numeric(temp[n,c(which.digit)]) #retrieve location of x or y from temp for agent n
+			vec_radius <- 1:RAD #radius vector
+			values <- c(loc + vec_radius,loc - vec_radius) #range of possible locations within radius to choose from
+			#Important, wrap location values around edge of landscape (i.e., pacman)
+			values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
+			values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
+			temp[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
+			temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] #look up fitness
+			
+			}
+		#put temp values into Agent matrix
+		agents[[i]][ind.learn,] <- temp[ind.learn,] 
+		
+		#check if new fitness is better, and if not, revert to old solution
 	    #determine who's switching to the new option and who is keeping the old option
 	    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
 	    not.switching<-setdiff(1:100,switching[switching!=0])
@@ -269,7 +228,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	    
 	  }
 	} else {  
-	#RANDOM SEARCH
+	#5. RANDOM SEARCH
 	for (i in 2:tsteps){
 	    
 	    agents[[i]]<-agents[[i-1]] #carry over previous choices
@@ -285,7 +244,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	        
 	        
 	     temp[n,1:2] <- sample(range,2)
-	     temp[n,3] <- fitness[[q]][temp[n,1],temp[n,2] ]   
+	     temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ]   
 	        
 	        
 	        
@@ -307,13 +266,14 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 	  }  
 	}  
 	  
-	  perf.time[,q,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
+	  perf.time[,env,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
 	  
 	}
 	
 	
 }
-q=q+1
+#increment env counter
+env=env+1 #env = 15 for Mason and Watts
 
 total <- matrix(0,ncol=n.strat,nrow=tsteps)
 for(repM in 1:100){
@@ -333,7 +293,7 @@ for (strat in 1:n.strat){
     for (i in 2:tsteps){
       
       agents[[i]]<-agents[[i-1]] #carry over previous choices
-      samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+      samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
       
       
       #best member rule
@@ -389,7 +349,7 @@ for (strat in 1:n.strat){
     for (i in 2:tsteps){
       
       agents[[i]]<-agents[[i-1]] #carry over previous choices
-      samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+      samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
       
       
       #best member rule
@@ -445,7 +405,7 @@ for (strat in 1:n.strat){
     for (i in 2:tsteps){
       
       agents[[i]]<-agents[[i-1]] #carry over previous choices
-      samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+      samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
       
       
       #best member rule
@@ -590,7 +550,7 @@ for (strat in 1:n.strat){
   
 }
 
-# perf.time[,q,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
+# perf.time[,env,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
 
 #calculate mean performance over time
 
@@ -599,13 +559,14 @@ for (strat in 1:n.strat){
 }
 total <- total/100
 for(strat in 1:n.strat){
-perf.time[,q,strat]<-total[,strat]
+perf.time[,env,strat]<-total[,strat]
 }
-q=q+1
+env=env+1
 
 #C) NK environments
-load("store20.Rdata")
+load("store20.Rdata") #A matrix storing all one digit neighbors for each NK solution
 setwd("landscapes")
+#each landscape is a 2 column matrix, [decimal representation of a binary string, payoff]
 landscapes <- list.files()
 N=20
 total_NK <- matrix(0,ncol=n.strat,nrow=tsteps)
@@ -623,7 +584,7 @@ for(strat in 1:n.strat){
   for (i in 2:tsteps){
     
     agents[[i]]<-agents[[i-1]]
-    samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
     
     
     
@@ -636,7 +597,7 @@ for(strat in 1:n.strat){
     
    
     
-    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or equal
+    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or eenvual
     
     # switching.indlearn<-ifelse(agents[[i-1]][c(ind.learn),2] < agents[[i]][c(ind.learn),2],1,0)*1:length(ind.learn)
     
@@ -654,7 +615,7 @@ for(strat in 1:n.strat){
   for (i in 2:tsteps){
 	
 agents[[i]]<-agents[[i-1]]
-samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
 
 
 
@@ -681,7 +642,7 @@ l=0
 for (n in c(ind.learn)){l=l+1; agents[[i]][n,]<-new[l,]}
 }
 
-switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or equal
+switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or eenvual
 
 switching.indlearn<-ifelse(agents[[i-1]][c(ind.learn),2] < agents[[i]][c(ind.learn),2],1,0)*1:length(ind.learn)
 
@@ -699,7 +660,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
   for (i in 2:tsteps){
     
     agents[[i]]<-agents[[i-1]]
-    samples<-sapply(1:100, function(x) sample(contacts[contacts[,1]==x,2],samplesize))
+    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
     
     
     
@@ -732,7 +693,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
       for (n in c(ind.learn)){l=l+1; agents[[i]][n,]<-new[l,]}
     }
     
-    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or equal
+    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or eenvual
     
     switching.indlearn<-ifelse(agents[[i-1]][c(ind.learn),2] < agents[[i]][c(ind.learn),2],1,0)*1:length(ind.learn)
     
@@ -757,7 +718,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
       
       h=0
       choose<-vector()
-      for (n in c(ind.learn)){h=h+1;choose[h]<-sample(store[,agents[[i]][n,1]+1],1)}
+      for (n in c(ind.learn)){h=h+1;choose[h]<-sample(store[,agents[[i]][n,1]+1],1)} # +1 is there a reason. Ask Daniel
       
       choose1 <- choose+1
       
@@ -768,7 +729,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
       for (n in c(ind.learn)){l=l+1; agents[[i]][n,]<-new[l,]}
     }
     
-    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or equal
+    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or eenvual
     
     switching.indlearn<-ifelse(agents[[i-1]][c(ind.learn),2] < agents[[i]][c(ind.learn),2],1,0)*1:length(ind.learn)
     
@@ -805,7 +766,7 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
       for (n in c(ind.learn)){l=l+1; agents[[i]][n,]<-new[l,]}
     }
     
-    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or equal
+    switching<-ifelse(agents[[i-1]][,2] < agents[[i]][,2],1,0)*1:n.agents #smaller or eenvual
     
     switching.indlearn<-ifelse(agents[[i-1]][c(ind.learn),2] < agents[[i]][c(ind.learn),2],1,0)*1:length(ind.learn)
     
@@ -830,12 +791,12 @@ agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
 }
 total_NK <-  total_NK/length(landscapes)
 for(strat in 1:n.strat){
-perf.time[,q,strat] <- total_NK[,strat]
+perf.time[,env,strat] <- total_NK[,strat]
 }
-both[[z]] <- perf.time
+finalResults[[z]] <- perf.time
 }
 
 setwd("~/COLLECTIVE_SEARCH")
 name<-paste0(v,RAD,'.Rdata',sep="",collapse=NULL)
-save(both, file=name)
+save(finalResults, file=name)
 
