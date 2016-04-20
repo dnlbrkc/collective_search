@@ -8,6 +8,11 @@ setwd("..")
 setwd("environments")
 load("environments.Rdata")
 source("functions.R") #environment functions
+#load network matrices
+setwd("Networks")
+load("fullNet.Rdata")
+load("localNet.Rdata")
+setwd("..")
 
 
 #MODEL PARAMETERS
@@ -21,11 +26,8 @@ range <- 1:1001
 strategies <- c("Imitation", "hybridLocal", "hybridFull", "hybridLocalRand", "hybridFullRand", "hillClimbing", "Random")
 
 
-finalResults <- list() #final results
-
-
-perf.time <- array(dim=c(tsteps,n_envs+2,n.strat))
-
+#output array
+perf.time <- array(dim=c(tsteps,n_envs+2,length(strategies)))
 
 #A) 2D rugged landscapes
 for (env in 1:length(fitness)){ #loop through 2D landscapes
