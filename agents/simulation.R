@@ -57,27 +57,7 @@ for (env in 1:length(fitness)){
 	#1.IMITATE THE BEST
 	if(strat==1){  
 		for (i in 2:tsteps){
-			agents[[i]]<-agents[[i-1]] #carry over previous choices
-			samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
-			ind.learn<-vector(length=n.agents)
-			k=0
-			for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
-				agents[[i]][j,]<-agents[[i]][samples[best,j],] 
-				if(agents[[i]][j,3]<=agents[[i-1]][j,3]){
-					ind.learn[j]<-k
-				}
-			}
-			ind.learn<-ind.learn[ind.learn!=0] 
-
-			#switch if better
-			temp <- agents[[i]]
-
-			#determine who's switching to the new option and who is keeping the old option
-			switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-			not.switching<-setdiff(1:100,switching[switching!=0])
-
-			#those who are not switching carry their option from the previous round
-			agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
+			agents[[i]] <- imitation(fitness[[env]], agents[[i-1]], network, samplesize =  samplesize , n.agents = n.agents)
 
 }
 	#2. HYBRID A
@@ -189,43 +169,8 @@ for (env in 1:length(fitness)){
 	  }
 	} else if (strat ==4){
 	#4. LOCAL 
-	
 	for (i in 2:tsteps){
-	    
-	    agents[[i]]<-agents[[i-1]] #carry over previous choices
-	   
-	    
-	    ind.learn<-1:100
-	   
-	    temp <- agents[[i]]
-	    
-
-		for (n in c(ind.learn)){
-			#radius based search + payoff store in temp
-			#each solution (x,y) consists of two digits
-			which.digit <- sample(c(1:2),1) #randomly sample one of the digits to modify
-			loc <- as.numeric(temp[n,c(which.digit)]) #retrieve location of x or y from temp for agent n
-			vec_radius <- 1:RAD #radius vector
-			values <- c(loc + vec_radius,loc - vec_radius) #range of possible locations within radius to choose from
-			#Important, wrap location values around edge of landscape (i.e., pacman)
-			values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-			values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-			temp[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
-			temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] #look up fitness
-			
-			}
-		#put temp values into Agent matrix
-		agents[[i]][ind.learn,] <- temp[ind.learn,] 
-		
-		#check if new fitness is better, and if not, revert to old solution
-	    #determine who's switching to the new option and who is keeping the old option
-	    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-	    not.switching<-setdiff(1:100,switching[switching!=0])
-	    
-	    #those who are not switching carry their option from the previous round
-	    agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
-	    
-	    
+	    agents[[i]]<-indSearch(fitness[[i]], agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = max(range), minRange=min(range))
 	  }
 	} else {  
 	#5. RANDOM SEARCH
