@@ -36,142 +36,40 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 	agents[[1]] <- cbind(choices,payoffs)  #combine choices and payoffs in matrix row: [x, y, payoff], col: n.agents
 	#loop through strategies
 	for(strat in 1:length(strategies)){
-		if(strat==1){ #imitation
+		if(strat==1){ #1. imitation
 			for (i in 2:tsteps){
 				agents[[i]] <- imitation(fitness[[env]], agents[[i-1]], network, samplesize =  samplesize , n.agents = n.agents)}
-		} else if (strat==2){ #hybrid with local network
+		} else if (strat==2){ #2. hybrid with local network
 			for (i in 2:tsteps){
-			    
-			    agents[[i]]<-agents[[i-1]] #carry over previous choices
-			    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
-			    
-			    #best member rule
-			    
-			    ind.learn<-vector(length=n.agents)
-			    k=0
-			    for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
-			    agents[[i]][j,]<-agents[[i]][samples[best,j],]; 
-			    if(agents[[i]][j,3]<=agents[[i-1]][j,3]){ind.learn[j]<-k}
-			    }
-			    ind.learn<-ind.learn[ind.learn!=0] 
-			    
-			    #switch if better
-			    temp <- agents[[i]]
-			    
-			    if(length(ind.learn)>=1){
-			      
-			      for (n in c(ind.learn)){
-			        
-			        #radius based search + payoff store in temp
-			        which.digit <- sample(c(1:2),1) 
-			        radius <- as.numeric(temp[n,c(which.digit)])
-			        vec_radius <- 1:RAD
-			        values <- c(radius + vec_radius,radius - vec_radius)
-			        # values <- c(radius + vec_radius,radius - vec_radius)
-			        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-			        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-			        temp[n,which.digit] <- sample(values,1)
-			        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] 
-			        
-			      }
-			      
-			      
-			      agents[[i]][ind.learn,] <- temp[ind.learn,]
-			    }
-			    
-			    #determine who's switching to the new option and who is keeping the old option
-			    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-			    not.switching<-setdiff(1:100,switching[switching!=0])
-			    
-			    #those who are not switching carry their option from the previous round
-			    agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
-			    
-			    
-			  }
-		} else if (strat ==3) { 
-		#3. hybridFull
-		for (i in 2:tsteps){
-		    
-		    agents[[i]]<-agents[[i-1]] #carry over previous choices
-		    samples<-sapply(1:100, function(x) sample(network[network[,1]==x,2],samplesize))
-		    
-		    #best member rule
-		    
-		    ind.learn<-vector(length=n.agents)
-		    k=0
-		    for (j in 1:n.agents){k=k+1; al<-agents[[i]][samples[,j],3]; best<-which(al==max(al)); if(length(best)>1){best<-sample(best,1)}  
-		    agents[[i]][j,]<-agents[[i]][samples[best,j],]; 
-		    if(agents[[i]][j,3]<=agents[[i-1]][j,3]){ind.learn[j]<-k}
-		    }
-		    ind.learn<-ind.learn[ind.learn!=0] 
-		    
-		    #switch if better
-		    temp <- agents[[i]]
-		    
-		    if(length(ind.learn)>=1){
-		      
-		      for (n in c(ind.learn)){
-		        
-		        if(runif(1)>0.2){
-		        #radius based search + payoff store in temp
-		        which.digit <- sample(c(1:2),1) 
-		        radius <- as.numeric(temp[n,c(which.digit)])
-		        vec_radius <- 1:RAD
-		        values <- c(radius + vec_radius,radius - vec_radius)
-		        # values <- c(radius + vec_radius,radius - vec_radius)
-		        values[values>max(range)] <- min(range):((min(range)+length(values[values>max(range)]))-1)
-		        values[values< min(range)] <- ((max(range)-length(values[values<min(range)]))+1):max(range)
-		        temp[n,which.digit] <- sample(values,1)
-		        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ] 
-		        } else {
-		        temp[n,1:2] <- sample(range,2)
-		        temp[n,3] <- fitness[[env]][temp[n,1],temp[n,2] ]
-		        }
-
-		        
-		      }
-		      
-		      
-		      agents[[i]][ind.learn,] <- temp[ind.learn,]
-		    }
-		    
-		    #determine who's switching to the new option and who is keeping the old option
-		    switching<-ifelse(agents[[i-1]][,3]<agents[[i]][,3],1,0)*1:n.agents
-		    not.switching<-setdiff(1:100,switching[switching!=0])
-		    
-		    #those who are not switching carry their option from the previous round
-		    agents[[i]][not.switching,]<-agents[[i-1]][not.switching,]
-		    
-		    
-		  }
-		} else if (strat ==4){ #HybridLocalRand
-
-		}else if (strat ==5){
-
-		}else if (strat ==6){
-		#4. LOCAL 
-		for (i in 2:tsteps){
-		    agents[[i]]<-indSearch(fitness[[i]], agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = max(range), minRange=min(range))
-		  }
-		} else {  
-		#5. RANDOM SEARCH
-		for (i in 2:tsteps){
-		    agents[[i]]<-indSearch(fitness[[i]], agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = max(range), minRange=min(range))
-		}  
-	
-	#save results  
-	perf.time[,env,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
-	}  
+			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = max(range), minRange=min(range))}
+		} else if (strat ==3){#3. hybrid with full network 
+			for (i in 2:tsteps){
+			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = max(range), minRange=min(range))}
+		} else if (strat ==4){#4. Hybrid with local network and rand=0.2
+			for (i in 2:tsteps){
+			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = max(range), minRange=min(range))}
+		}else if (strat ==5){#5. Hybrid with full network and rand=0.2
+			for (i in 2:tsteps){
+			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = max(range), minRange=min(range))}
+		}else if (strat ==6){#6. hill climbing 
+			for (i in 2:tsteps){
+			    agents[[i]]<-indSearch(fitness[[i]], agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = max(range), minRange=min(range))}
+		} else {#7. random search
+			for (i in 2:tsteps){
+			    agents[[i]]<-indSearch(fitness[[i]], agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = max(range), minRange=min(range))}  
+			}
+		#save results  
+		perf.time[,env,strat]<-sapply(1:tsteps, function(x) mean(agents[[x]][,3]))
 	}
-	
-	
 }
+
+#B) Mason and Watts environment
 #increment env counter
 env=env+1 #env = 15 for Mason and Watts
 
 total <- matrix(0,ncol=n.strat,nrow=tsteps)
 for(repM in 1:100){
-#B) Mason and Watts environment
+
 MasonWattsEnv <- MasonWatts(1001) #each different replication will get a different randomization of the environment
 agents <- list()
 choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
