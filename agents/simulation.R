@@ -40,7 +40,7 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 	for(strat in 1:length(strategies)){
 		if(strat==1){ #1. imitation
 			for (i in 2:tsteps){
-				agents[[i]] <- imitation(fitness[[env]], agents[[i-1]], network, samplesize =  samplesize , n.agents = n.agents)}
+				agents[[i]] <- imitation(fitness[[env]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents)}
 		} else if (strat==2){ #2. hybrid with local network
 			for (i in 2:tsteps){
 			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = max(range), minRange=min(range))}
