@@ -1,0 +1,693 @@
+source('~/Dropbox/multipeak_learning/Plots/all_environments.R', chdir = TRUE)
+install.packages("")
+install.packages("ggrepel")
+install.packages()
+install.packages("CEGO")
+fun <- benchmarkGeneratorNKL(6,2)
+library(CEGO)
+fun <- benchmarkGeneratorNKL(6,2)
+fun(c(1,0,1,1,0,0))
+getwd()
+setwd("github")
+getwd()
+setwd("ruggedness")
+getwd()
+list.files()
+setwd("environments")
+ackley <- function(xx, a=20, b=0.2, c=2*pi)#
+{#
+  ###########################################################################
+  ##
+  # ACKLEY FUNCTION#
+  ##
+  # Authors: Sonja Surjanovic, Simon Fraser University#
+  #          Derek Bingham, Simon Fraser University#
+  # Questions/Comments: Please email Derek Bingham at dbingham@stat.sfu.ca.#
+  ##
+  # Copyright 2013. Derek Bingham, Simon Fraser University.#
+  ##
+  # THERE IS NO WARRANTY, EXPRESS OR IMPLIED. WE DO NOT ASSUME ANY LIABILITY#
+  # FOR THE USE OF THIS SOFTWARE.  If software is modified to produce#
+  # derivative works, such modified software should be clearly marked.#
+  # Additionally, this program is free software; you can redistribute it #
+  # and/or modify it under the terms of the GNU General Public License as #
+  # published by the Free Software Foundation; version 2.0 of the License. #
+  # Accordingly, this program is distributed in the hope that it will be #
+  # useful, but WITHOUT ANY WARRANTY; without even the implied warranty #
+  # of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU #
+  # General Public License for more details.#
+  ##
+  # For function details and reference information, see:#
+  # http://www.sfu.ca/~ssurjano/#
+  ##
+  ###########################################################################
+  ##
+  # INPUTS:#
+  ##
+  # xx = c(x1, x2, ..., xd)#
+  # a = constant (optional), with default value 20#
+  # b = constant (optional), with default value 0.2#
+  # c = constant (optional), with default value 2*pi#
+  ##
+  ###########################################################################
+  d <- length(xx)#
+  sum1 <- sum(xx^2)#
+  sum2 <- sum(cos(c*xx))#
+  term1 <- -a * exp(-b*sqrt(sum1/d))#
+  term2 <- -exp(sum2/d)#
+  y <- term1 + term2 + a + exp(1)#
+  y <- (y -  4.440892e-16) / (2.232012e+01 - 4.440892e-16)#
+  return(y)#
+}
+ackley(c(1,2))
+ackley(c(1,3))
+seq(-32.768,32.768,(32.768+32.768)/1000)
+length(seq(-32.768,32.768,(32.768+32.768)/1000))
+length(seq(-10,10,0.02))
+seq(-32.768,32.768,(32.768+32.768)/1000)[100]
+seq(-32.768,32.768,(32.768+32.768)/1000)[1001]
+seq(-32.768,32.768,(32.768+32.768)/1000)[1002]
+ackley(c(seq(-32.768,32.768,(32.768+32.768)/1000)[1],seq(-32.768,32.768,(32.768+32.768)/1000)[2]
+)
+)
+seq(-5.12,5.12,0.01024)
+length(seq(-5.12,5.12,0.01024))
+length(seq(-512,512,1.024))
+length(seq(0,10,0.01))
+seq(-5.12,5.12,0.01024)
+length(seq(-5.12,5.12,0.01024))
+ackleyRange <- seq(-32.768,32.768,(32.768+32.768)/1000) #1:1001#
+crossitRange <- seq(-10,10,0.02) #1:1001#
+dropRange <- seq(-5.12,5.12,0.01024) #1:1001#
+eggRange <- seq(-512,512,1.024) #1:1001#
+griewankRange <- seq(-600,600,1.2) #1:1001#
+holderRange <- seq(-10,10,0.02)#
+langerRange <- seq(0,10,0.01)#
+levyRange <- seq(-10,10,0.02)#
+levy13Range <- seq(-10,10,0.02)#
+rastrRange <- seq(-5.12,5.12,0.01024)#
+schaffer2Range <- seq(-100,100,0.2)#
+schaffer4Range <- seq(-100,100,0.2)#
+schwefRange <- seq(-500,500,1)#
+shubertRange <- seq(-10,10,0.02)
+lirary(pryr)
+library(pryr)
+install.packages("pryr")
+library(pryr)
+object_size(ackleyRange)
+object_size(ackley)
+object_size(egg)
+object_size(eggRange)
+egg <- function(xx)#
+{#
+  ###########################################################################
+  ##
+  # EGGHOLDER FUNCTION#
+  ##
+  # Authors: Sonja Surjanovic, Simon Fraser University#
+  #          Derek Bingham, Simon Fraser University#
+  # Questions/Comments: Please email Derek Bingham at dbingham@stat.sfu.ca.#
+  ##
+  # Copyright 2013. Derek Bingham, Simon Fraser University.#
+  ##
+  # THERE IS NO WARRANTY, EXPRESS OR IMPLIED. WE DO NOT ASSUME ANY LIABILITY#
+  # FOR THE USE OF THIS SOFTWARE.  If software is modified to produce#
+  # derivative works, such modified software should be clearly marked.#
+  # Additionally, this program is free software; you can redistribute it #
+  # and/or modify it under the terms of the GNU General Public License as #
+  # published by the Free Software Foundation; version 2.0 of the License. #
+  # Accordingly, this program is distributed in the hope that it will be #
+  # useful, but WITHOUT ANY WARRANTY; without even the implied warranty #
+  # of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU #
+  # General Public License for more details.#
+  ##
+  # For function details and reference information, see:#
+  # http://www.sfu.ca/~ssurjano/#
+  ##
+  ###########################################################################
+  ##
+  # INPUT:#
+  ##
+  # xx = c(x1, x2)#
+  ##
+  ###########################################################################
+  x1 <- xx[1]#
+  x2 <- xx[2]#
+  term1 <- -(x2+47) * sin(sqrt(abs(x2+x1/2+47)))#
+  term2 <- -x1 * sin(sqrt(abs(x1-(x2+47))))#
+  y <- term1 + term2#
+  y <- (y - -9.595705e+02) / (1.049132e+03 - -9.595705e+02)#
+  return(y)#
+}
+object_size(egg)
+pow(2,1024)
+library(CEGO)
+NKfunc <- benchmarkGeneratorNKL(20,19)
+object_size(NKfunc)
+y <- NKfunc(c(rep(0,20)))
+y
+y <- NKfunc(c(sample(c(0,1),20)))
+sample(c(0,1),5)
+sample(c(0,1),1)
+sample(c(0,1),2)
+sample(c(0,1),3)
+sample(c(0,1),1)
+sample(c(0,1),1)
+sample(c(0,1),1)
+y <- NKfunc(rep(sample(c(0,1),20)))
+y <- NKfunc(rep(sample(c(0,1),1)),20)
+rep(sample(c(0,1),1)10)
+rep(sample(c(0,1),1),10)
+rep(sample(c(0,1),1),10)
+rep(sample(c(0,1),2),10)
+rep(sample(c(0,1),2),10)
+rep(sample(c(0,1),2),10)
+rep(sample(c(0,1),2),10)
+sample(c(1,0), 20, replace=TRUE)
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+NKfunc(sample(c(1,0), 20, replace=TRUE))
+test <- matrix(, nrow=10, ncol=10)
+test
+test[1][2] = 3
+test[1][2] <-3
+test[1,2] <- 3
+test
+i<-1
+source("envRange.R")#
+source("functions.R")#
+#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- c(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")
+env<- envList[i]#
+    envRange <- rangeList[i]#
+    envName <- envNames[i]
+x <- 546
+y <- 234
+xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitness <- env(c(xloc,yloc))
+env<- envList[i]
+fitness <- env(c(xloc,yloc))
+envList[i]
+env
+env(c(1,2))
+typeof(env)
+env<- envList[[i]]
+fitness <- env(c(xloc,yloc))
+fitness
+xloc
+x
+envRange[5]
+envRange
+rangeList
+length(rangeList)
+ackleyRange <- c(seq(-32.768,32.768,(32.768+32.768)/1000))#
+crossitRange <- c(seq(-10,10,0.02))#
+dropRange <- c(seq(-5.12,5.12,0.01024))#
+eggRange <- c(seq(-512,512,1.024))#
+griewankRange <- c(seq(-600,600,1.2))#
+holderRange <- c(seq(-10,10,0.02))#
+langerRange <- c(seq(0,10,0.01))#
+levyRange <- c(seq(-10,10,0.02))#
+levy13Range <- c(seq(-10,10,0.02))#
+rastrRange <- c(seq(-5.12,5.12,0.01024))#
+schaffer2Range <- c(seq(-100,100,0.2))#
+schaffer4Range <- c(seq(-100,100,0.2))#
+schwefRange <- c(seq(-500,500,1))#
+shubertRange <- c(seq(-10,10,0.02))
+rangeList <- c(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )
+length(rangelist)
+length(rangeList)
+rangeList <- list((ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )
+rangeList
+rangeList[[1]]
+env<- envList[[i]]#
+    envRange <- rangeList[[i]]
+engRange[4]
+envRange[4]
+xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitness <- env(c(xloc,yloc))
+fitness
+shubert(c(-186.73, -186.73))
+shubert(c(-186.73, -187.73))
+ackley(c(0,0))
+ackley(c(3,0))
+ackley(c(40,-40))
+ackley <- function(xx, a=20, b=0.2, c=2*pi)#
+{#
+  ###########################################################################
+  ##
+  # ACKLEY FUNCTION#
+  ##
+  # Authors: Sonja Surjanovic, Simon Fraser University#
+  #          Derek Bingham, Simon Fraser University#
+  # Questions/Comments: Please email Derek Bingham at dbingham@stat.sfu.ca.#
+  ##
+  # Copyright 2013. Derek Bingham, Simon Fraser University.#
+  ##
+  # THERE IS NO WARRANTY, EXPRESS OR IMPLIED. WE DO NOT ASSUME ANY LIABILITY#
+  # FOR THE USE OF THIS SOFTWARE.  If software is modified to produce#
+  # derivative works, such modified software should be clearly marked.#
+  # Additionally, this program is free software; you can redistribute it #
+  # and/or modify it under the terms of the GNU General Public License as #
+  # published by the Free Software Foundation; version 2.0 of the License. #
+  # Accordingly, this program is distributed in the hope that it will be #
+  # useful, but WITHOUT ANY WARRANTY; without even the implied warranty #
+  # of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU #
+  # General Public License for more details.#
+  ##
+  # For function details and reference information, see:#
+  # http://www.sfu.ca/~ssurjano/#
+  ##
+  ###########################################################################
+  ##
+  # INPUTS:#
+  ##
+  # xx = c(x1, x2, ..., xd)#
+  # a = constant (optional), with default value 20#
+  # b = constant (optional), with default value 0.2#
+  # c = constant (optional), with default value 2*pi#
+  ##
+  ###########################################################################
+  d <- length(xx)#
+  sum1 <- sum(xx^2)#
+  sum2 <- sum(cos(c*xx))#
+  term1 <- -a * exp(-b*sqrt(sum1/d))#
+  term2 <- -exp(sum2/d)#
+  y <- term1 + term2 + a + exp(1)#
+  y <- (y -  4.440892e-16) / (2.232012e+01 - 4.440892e-16)#
+  return(y)#
+}
+ackley(c(40,-40))
+ackley(c(0,0))
+max(test)
+min(test)
+test
+down vote#
+favorite#
+1#
+I've got this matrix in R#
+#
+a= matrix( rnorm(1000*18,mean=100,sd=sqrt(10)), 1000, 18)
+down vote#
+favorite#
+1#
+I've got this matrix in R#
+#
+a= matrix( rnorm(1000*18,mean=100,sd=sqrt(10)), 1000, 18)
+a= matrix( rnorm(1000*18,mean=100,sd=sqrt(10)), 1000, 18)
+max(a)
+min(a)
+#Find the max and min fitness of the environment#
+#
+source("envRange.R")#
+source("functions.R")#
+#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    print(envName)#
+    print(c(max(fitnessMatrix),min(fitnessMatrix))) #
+}
+y <- 5
+y <- -y
+y
+y<- 2.232012e+01
+y
+y <- (-y + 2.232012e+01)/ abs(2.232012e+01 - 4.440892e-16)
+y
+y<- 4.440892e-16
+y <- (-y + 2.232012e+01)/ abs(2.232012e+01 - 4.440892e-16)
+y
+y<- -0.000100
+y <- (-y -0.000100)/ abs(-0.000100 - -2.062593)
+y
+y<- -2.062593
+y <- (-y -0.000100)/ abs(-0.000100 - -2.062593)
+y
+9.538281e+01
+<- 0.9968394
+Y <- 0.9968394
+y<- 0.9968394
+y <- (y)/ 0.9968394
+y
+#Find the max and min fitness of the environment#
+#
+source("envRange.R")#
+source("functions.R")#
+#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    print(envName)#
+    print(c(max(fitnessMatrix),min(fitnessMatrix))) #
+}
+1.675931e+03
+0.5016795
+1.248347e-08
+source("/Users/wu/github/ruggedness/environments/functions.R")
+#Find the max and min fitness of the environment#
+#
+source("envRange.R")#
+source("functions.R")#
+#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    print(envName)#
+    print(c(max(fitnessMatrix),min(fitnessMatrix))) #
+}
+9.999999e-01
+source("envRange.R")#
+source("functions.R")#
+#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+#
+#move to data folder#
+setwd("data")#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #Write matrix to file#
+    filename <- paste(envName, "Rdata", sep = ".")#
+    write.matrix(fitnessMatrix, file = filename)#
+}#
+#
+setwd("..")
+install.packages()
+install.packages("MASS")
+library(MASS)
+head(fitnessMatrix)
+write.matrix(fitnessMatrix, file = filename)
+write(fitnessMatrix, file="test.Rdata")
+object_size(fitnessMatrix)
+load("test.Rdata")
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+output <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    output[[i]] <- fitnessMatrix#
+}#
+#move to data folder#
+setwd("data")#
+save(output, "environments.Rdata")#
+setwd("..")
+object_size(output)
+save(output, file="environments.Rdata")
+rm(list=ls())
+load("environments.Rdata")
+ls
+ls()
+object_size(output)
+output[[1]][5,6]
+output[[1]][500,600]
+output[[1]][500,500]
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    output[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")
+Afunc <-function(iter){ptm<-proc.time()
+for (i in 1:iter){}
+Afunc<- function(iter){#
+    ptm<- proc.time()#
+    for (i in 1:iter){#
+        x<- sample(1:1001,1)#
+        y <- sample(1:1001,1)#
+        blah<- output[[3]][x,y]#
+    }#
+    return(proc.time() - ptm)#
+}
+}
+Afunc(100)
+print(Afunc(100))
+Afunc<- function(iter){#
+    ptm<- proc.time()#
+    for (i in 1:iter){#
+        x<- sample(1:1001,1)#
+        y <- sample(1:1001,1)#
+        blah<- output[[3]][x,y]#
+    }#
+    print(proc.time() - ptm)#
+}
+Afunc(100)
+Afunc(1000)
+Afunc(10000)
+.22 * 100
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    output[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    fitness[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+ptm <- proc.time()#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    fitness[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")#
+#
+print(proc.time() - ptm)
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+ptm <- proc.time()#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    fitness[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")#
+#
+print(proc.time() - ptm)
+#loop through each environment, and save the fitness as a 1001 x 1001 matrix#
+ptm <- proc.time()#
+source("envRange.R")#
+source("functions.R")#
+envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)#
+rangeList <- list(ackleyRange, crossitRange, dropRange, eggRange, griewankRange, holderRange, langerRange, levyRange, levy13Range, rastrRange, schaffer2Range, schaffer4Range, schwefRange, shubertRange )#
+envNames <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")#
+fitness <-list()#
+for (i in 1:14){#loop through environments#
+    env<- envList[[i]]#
+    envRange <- rangeList[[i]]#
+    envName <- envNames[[i]]#
+    fitnessMatrix <- matrix(, ncol=1001, nrow =1001)#
+    #loop through 1:1000 for x and y#
+    for (x in 1:1001){#
+        for (y in 1:1001){#
+            xloc <- envRange[x]#
+            yloc <- envRange[y]#
+            fitnessMatrix[x,y] <- env(c(xloc,yloc))#
+        }#
+    }#
+    #add to output list#
+    fitness[[i]] <- fitnessMatrix#
+}#
+#
+save(fitness, file="environments.Rdata")#
+#
+print(proc.time() - ptm)
+rm(list=ls())
+load()
+load("environments.Rdata")
+object_size(fitness)
+fitness[[4]][76,34]
+max(fitness[[1]])
+max(fitness[[2]])
+max(fitness[[3]])
+22 * 9
+198 * 14
+2772/60
