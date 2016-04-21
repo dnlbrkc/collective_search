@@ -45,7 +45,7 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 	for(strat in 1:length(strategies)){
 		if(strat==1){ #1. imitation
 			for (i in 2:tsteps){
-				agents[[i]] <- imitation(fitness[[env]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents)}
+				agents[[i]] <- imitation(agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents)}
 		} else if (strat==2){ #2. hybrid with local network
 			for (i in 2:tsteps){
 			    agents[[i]] <- hybrid(fitness[[env]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
@@ -72,11 +72,12 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 
 #B) Mason and Watts environment
 #TODO: either save randomization of environments, or pre-compute them (for calculating peaks, mu, and sigma)
-env=env+1 #env = 15 for Mason and Watts
+env=n_envs+1 #env = 15 for Mason and Watts
 total <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix
+#load Mason and watts environments
+load("MasonWattsEnv.Rdata")#load the 100 random iterations of the Mason and Watts environment
 #loop through replications
 for(repM in 1:100){
-  MasonWattsEnv <- MasonWatts(1001) #each different replication gets a different randomization of the environment
   agents <- list()
   choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
   payoffs<- apply(choices, 1, function(x) MasonWattsEnv[x[1],x[2]]) #look up payoff from fitness matrix
@@ -86,31 +87,31 @@ for(repM in 1:100){
 	for(strat in 1:length(strategies)){
     if(strat==1){ #1. imitation
       for (i in 2:tsteps){
-        agents[[i]] <- imitation(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents)}
+        agents[[i]] <- imitation(agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents)}
     } else if (strat==2){ #2. hybrid with local network
       for (i in 2:tsteps){
-          agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+          agents[[i]] <- hybrid(MasonWattsEnv[[repM]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
     } else if (strat ==3){#3. hybrid with full network 
       for (i in 2:tsteps){
-          agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+          agents[[i]] <- hybrid(MasonWattsEnv[[repM]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
     } else if (strat ==4){#4. Hybrid with local network and rand=0.2
       for (i in 2:tsteps){
-          agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+          agents[[i]] <- hybrid(MasonWattsEnv[[repM]], agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
     }else if (strat ==5){#5. Hybrid with full network and rand=0.2
       for (i in 2:tsteps){
-          agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+          agents[[i]] <- hybrid(MasonWattsEnv[[repM]], agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
     }else if (strat ==6){#6. hill climbing 
       for (i in 2:tsteps){
-          agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+          agents[[i]]<-indSearch(MasonWattsEnv[[repM]], agents[[i-1]], RS= 0, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}
     } else {#7. random search
       for (i in 2:tsteps){
-          agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
+          agents[[i]]<-indSearch(MasonWattsEnv[[repM]], agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
       }
-  total[,strat] <- total[,strat] + sapply(1:tsteps, function(x) mean(agents[[x]][,3])) 
+  total[,strat] <- total[,strat] + sapply(1:tsteps, function(x) mean(agents[[x]][,3])) #sums over all replications
   }
 }
 #calculate mean performance over time
-total <- total/100
+total <- total/100 #calculates averageover replications
 for(strat in 1:length(strategies)){
   output[,env,strat]<-total[,strat] #save to output array
 }
@@ -120,7 +121,7 @@ N=20
 load("store20.Rdata") #matrix storing all one digit neighbors for each NK solution
 setwd("NKlandscapes")
 for (k in kVec){
-  env=env+1 #increment counter
+  env=n_envs + 1 + which(kVec==k) #increment counter
   #load pre-computed NK environments
   setwd(k)
   landscapes <- list.files()
@@ -134,7 +135,7 @@ for (k in kVec){
     for(strat in 1:length(strategies)){
       if(strat==1){ #1. imitation
         for (i in 2:tsteps){
-          agents[[i]] <- imitation(landscape, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE)}
+          agents[[i]] <- imitation(agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE)}
       } else if (strat==2){ #2. hybrid with local network
         for (i in 2:tsteps){
             agents[[i]] <- hybrid(landscape, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
@@ -149,10 +150,10 @@ for (k in kVec){
             agents[[i]] <- hybrid(landscape, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       }else if (strat ==6){#6. hill climbing 
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 0, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 0, NK = TRUE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       } else {#7. random search
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
+            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents,  RAD = RAD, maxRange = maxRange, minRange=minRange)}  
         }
       }
     total_NK[,strat] <- total_NK[,strat] +  sapply(1:tsteps, function(x) mean(agents[[x]][,2])) #sum performance over all landscapes
@@ -161,9 +162,11 @@ for (k in kVec){
   for(strat in 1:length(strategies)){
     output[,env,strat] <- total_NK[,strat]
   }
+  setwd("..") #jump back out to "/NKlandscapes" folder
 }
 
-setwd(".."); setwd(".."); setwd(".."); setwd("analysis")
+#Save results and move back to original code folder
+setwd(".."); setwd(".."); setwd("analysis")
 name<-paste0(v,RAD,'.Rdata',sep="",collapse=NULL)
 save(output, file=name)
 setwd(".."); setwd("agents")

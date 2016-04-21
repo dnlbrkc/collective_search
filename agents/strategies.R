@@ -1,6 +1,6 @@
 #imitation, hybrid, and individual learning
 
-imitation <- function(fitnessMatrix, prevChoices, network, NK = FALSE, samplesize = 3, n.agents = 100){
+imitation <- function(prevChoices, network, NK = FALSE, samplesize = 3, n.agents = 100){
 	#imitate the best strategy
 	if (NK==FALSE){#check if NK, because NK fitness matrices have 2 cols and 2D envs have 3 cols
 		payoff.id <- 3
@@ -61,7 +61,7 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 					newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
 				}else{#NK
 				newChoices[n,1] <- sample(store[,prevChoices[n,1]+1],1) #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
-				newChoices[n,2] <- landscape[newChoices[n,1],2] #add fitness to new choices matrix
+				newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 				}
 			}
 			else{ #random search
@@ -70,7 +70,7 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 		     		newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2]] #look up fitness
 				}else{#NK
 					newChoices[n,1] <- sample(1:2^N,1) #randomly sample a new solution
-					newChoices[n,2] <- landscape[newChoices[n,1],2] #add fitness to new choices matrix
+					newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 				}
 			}
 		}
@@ -105,7 +105,7 @@ indSearch <- function(fitnessMatrix, prevChoices, RS= 0, NK = FALSE, n.agents = 
 				newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
 			}else{#NK
 			newChoices[n,1] <- sample(store[,prevChoices[n,1]+1],1) #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
-			newChoices[n,2] <- landscape[newChoices[n,1],2] #add fitness to new choices matrix
+			newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 			}
 		}
 		else{ #random search
@@ -114,7 +114,7 @@ indSearch <- function(fitnessMatrix, prevChoices, RS= 0, NK = FALSE, n.agents = 
 	     		newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2]] #look up fitness
 			}else{#NK
 				newChoices[n,1] <- sample(1:2^N,1) #randomly sample a new solution
-				newChoices[n,2] <- landscape[newChoices[n,1],2] #add fitness to new choices matrix
+				newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 			}
 		}
 	}
