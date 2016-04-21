@@ -134,25 +134,25 @@ for (k in kVec){
     for(strat in 1:length(strategies)){
       if(strat==1){ #1. imitation
         for (i in 2:tsteps){
-          agents[[i]] <- imitation(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE)}
+          agents[[i]] <- imitation(landscape, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE)}
       } else if (strat==2){ #2. hybrid with local network
         for (i in 2:tsteps){
-            agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]] <- hybrid(landscape, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       } else if (strat ==3){#3. hybrid with full network 
         for (i in 2:tsteps){
-            agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]] <- hybrid(landscape, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       } else if (strat ==4){#4. Hybrid with local network and rand=0.2
         for (i in 2:tsteps){
-            agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]] <- hybrid(landscape, agents[[i-1]], localNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       }else if (strat ==5){#5. Hybrid with full network and rand=0.2
         for (i in 2:tsteps){
-            agents[[i]] <- hybrid(MasonWattsEnv, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]] <- hybrid(landscape, agents[[i-1]], fullNet, samplesize =  samplesize , n.agents = n.agents, NK=TRUE, RS = 0.2, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       }else if (strat ==6){#6. hill climbing 
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 0, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}
+            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 0, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}
       } else {#7. random search
         for (i in 2:tsteps){
-            agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
+            agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents, NK=TRUE, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
         }
       }
     total_NK[,strat] <- total_NK[,strat] +  sapply(1:tsteps, function(x) mean(agents[[x]][,2])) #sum performance over all landscapes
