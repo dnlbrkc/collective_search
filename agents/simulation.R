@@ -32,7 +32,7 @@ kVec <- c("5") #K values to use in NK environments
 strategies <- c("Imitation", "hybridLocal", "hybridFull", "hybridLocalRand", "hybridFullRand", "hillClimbing", "Random")
 
 #output array
-output <- array(dim=c(tsteps,n_envs+2,length(strategies)))
+output <- array(dim=c(tsteps,n_envs+1+length(kVec),length(strategies)))
 
 #A) 2D rugged landscapes
 for (env in 1:length(fitness)){ #loop through 2D landscapes
@@ -73,7 +73,7 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 #B) Mason and Watts environment
 #TODO: either save randomization of environments, or pre-compute them (for calculating peaks, mu, and sigma)
 env=env+1 #env = 15 for Mason and Watts
-total <- matrix(0,ncol=n.strat,nrow=tsteps) #output matrix
+total <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix
 #loop through replications
 for(repM in 1:100){
   MasonWattsEnv <- MasonWatts(1001) #each different replication gets a different randomization of the environment
@@ -106,8 +106,8 @@ for(repM in 1:100){
       for (i in 2:tsteps){
           agents[[i]]<-indSearch(MasonWattsEnv, agents[[i-1]], RS= 1, NK = FALSE, n.agents = n.agents, RAD = RAD, maxRange = maxRange, minRange=minRange)}  
       }
-
   total[,strat] <- total[,strat] + sapply(1:tsteps, function(x) mean(agents[[x]][,3])) 
+  }
 }
 #calculate mean performance over time
 total <- total/100

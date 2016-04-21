@@ -48,7 +48,7 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 		#2. if best peer choice was not better than previous choice, attempt individual learning
 		if(newChoices[n,payoff.id]<=prevChoices[n,payoff.id]){ 
 			#randomly draw a number to see if local or random search (TODO: Is there a faster way to avoid generating it if RS = 1 or 0?)
-			if (runif(1) > RS){ #local search
+			if (RS==0 | runif(1) > RS){ #local search
 				if (NK==FALSE){#2D environments
 					which.digit <- sample(c(1:2),1) #randomly sample one of the x or y values to modify
 					loc <- as.numeric(prevChoices[n,c(which.digit)]) #retrieve location of x or y from prevChoices for agent n
