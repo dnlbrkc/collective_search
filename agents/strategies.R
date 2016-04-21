@@ -60,8 +60,8 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 					newChoices[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
 					newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
 				}else{#NK
-				newChoices[n,1] <- sample(store[,prevChoices[n,1]+1],1) #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
-				newChoices[n,2] <- fitnessMatrix[newChoices[n,1]+1,2] #add fitness to new choices matrix
+				newChoices[n,1] <- sample(store[,prevChoices[n,1]],1)+1 #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
+				newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 				}
 			}
 			else{ #random search
@@ -104,8 +104,8 @@ indSearch <- function(fitnessMatrix, prevChoices, RS= 0, NK = FALSE, n.agents = 
 				newChoices[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
 				newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
 			}else{#NK
-			newChoices[n,1] <- sample(store[,prevChoices[n,1]+1],1) #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
-			newChoices[n,2] <- fitnessMatrix[newChoices[n,1]+1,2] #add fitness to new choices matrix
+			newChoices[n,1] <- sample(store[,prevChoices[n,1]],1)+1 #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
+			newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 			}
 		}
 		else{ #random search
