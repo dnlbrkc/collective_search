@@ -1,5 +1,5 @@
 #OS junk
-*.DS_store
+.DS_store
 [Tt]humbs.db
 
 #R files

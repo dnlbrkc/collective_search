@@ -1,4 +1,6 @@
-#Produce plots for all  environments
+#Produce plots for one iteration
+#clear existing data
+rm(list=ls())
 
 #requirements
 library(plyr)
@@ -10,15 +12,14 @@ library(gridExtra)
 require(plyr)
 require(rje)
 
-#clear existing data
-rm(list=ls())
-
+setwd("resultsApr21")
+filename <- "230.Rdata"
+load(filename)
+setwd("..")
 
 #Factors
 environments <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert", "masonAndWatts", "N=20,K=5")
 
-#load data
-load("ResultsApr21.Rdata")
 
 #initialize empty dataframe
 df <- data.frame(time = integer(), model = character(), environment=character(), avg.Payoff=double())
@@ -32,11 +33,11 @@ modelOrder <- c(6,7,1,2,3,4,5)
 
 
 #average over all environments, if we want to plot that
-#test<- sapply(1:8,function(x) rowMeans(total[[x]]))
+#test<- sapply(1:8,function(x) rowMeans(output[[x]]))
 
 #1. loop through different model levels
 for (model_n in modelOrder){
-	temp_df <- data.frame(total[,,model_n])
+	temp_df <- data.frame(output[,,model_n])
 	#format data.frame to be joined to the global df
 	#rename column names to environments from listr
 	names(temp_df) <- environments
@@ -56,5 +57,5 @@ for (model_n in modelOrder){
 df$model <- factor(df$model, models[modelOrder])
 p <- ggplot(df[df$time %in% c(1:100), ], aes(x = time, y = avg.Payoff, col = model, linetype = model)) + geom_line(lwd=0.6)  + ylim(0,1) + theme(legend.position="bottom") + guides(col = guide_legend(ncol = 3)) + facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = 2.8, r = -1.5 , hue=1.8, gamma = 1.6)) + labs(x = "Time Steps", y = "Average Payoff")
 
-
-ggsave("allEnvironments.pdf", plot = p, height =10, width = 7, units = "in")
+outputFile <- paste(filename, ".pdf", sep = "")
+ggsave(outputFile, plot = p, height =10, width = 7, units = "in")
