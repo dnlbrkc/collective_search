@@ -2,7 +2,7 @@ setwd("ResultsApr21")
 
 files <- list.files()
 
-total <- array(0,dim=c(200,16,7))
+total <- array(0,dim=c(100,16,7))
 
 for(f in files){
 

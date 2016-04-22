@@ -783,7 +783,7 @@ MasonWatts<-function(L){ #L specifies the size of the output matrix, which is L 
   #3 continued... transform to L x L grid using bicubic interpolation
   fitnessMatrix <- bicubic.grid(seq(1,L,length.out=100), seq(1,L,length.out=100), fitnessMatrix, c(1,L), c(1,L),1,1) 
   fitnessMatrix <- fitnessMatrix$z
-  #...scale fitnessMatrix to between 1 and 100
+  #...scale fitnessMatrix to between 0 and 1
   fitnessMatrix <- fitnessMatrix * (1/max(fitnessMatrix))
 
   return(fitnessMatrix)
