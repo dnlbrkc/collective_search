@@ -50,7 +50,7 @@ ackley <- function(xx, a=20, b=0.2, c=2*pi)
   
   y <- term1 + term2 + a + exp(1)
 
-  y <- (-y + 2.232012e+01)/ abs(2.232012e+01 - 0) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 2.232012e+01)/ abs(2.232012e+01 - 0) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -98,7 +98,7 @@ crossit <- function(xx)
   
   y <- -0.0001 * (abs(fact1*fact2)+1)^0.1
   
-  y <- (-y -0.000100)/ abs(-0.000100 - -2.062593) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y -0.000100)/ abs(-0.000100 - -2.062593) #convert to maximization problem and scale between 0 and 1
 
   return(y)
 }
@@ -144,7 +144,7 @@ drop <- function(xx)
   frac2 <- 0.5*(x1^2+x2^2) + 2
   
   y <- -frac1/frac2
-  y <- (-y + -6.036063e-11)/ abs(-6.036063e-11 - 1.000000e+00) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + -6.036063e-11)/ abs(-6.036063e-11 - 1.000000e+00) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -190,7 +190,7 @@ egg <- function(xx)
   term2 <- -x1 * sin(sqrt(abs(x1-(x2+47))))
   
   y <- term1 + term2
-  y <- (-y + 1049.1316)/ abs(1049.1316 - -959.5705) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 1049.1316)/ abs(1049.1316 - -959.5705) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -234,7 +234,7 @@ griewank <- function(xx)
   prod <- prod(cos(xx/sqrt(ii)))
   
   y <- sum - prod + 1
-  y <- (-y + 181.0395)/ abs(181.0395 - 0) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 181.0395)/ abs(181.0395 - 0) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -280,7 +280,7 @@ holder <- function(xx)
   fact2 <- exp(abs(1 - sqrt(x1^2+x2^2)/pi))
   
   y <- -abs(fact1*fact2)
-  y <- (-y + 0)/ abs(0 - -19.20805) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 0)/ abs(0 - -19.20805) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -355,7 +355,7 @@ langer <- function(xx, m=5, cvec, A)
   
   y <- outer
   
-  y <- (-y + 5.161699)/ abs(5.161699 - -4.155052) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 5.161699)/ abs(5.161699 - -4.155052) #convert to maximization problem and scale between 0 and 1
   return(y)
 }
 
@@ -404,7 +404,7 @@ levy <- function(xx)
   
   y <- term1 + sum + term3
   
-  y <- (-y + 9.538281e+01)/ abs(9.538281e+01 - 1.499760e-32) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 9.538281e+01)/ abs(9.538281e+01 - 1.499760e-32) #convert to maximization problem and scale between 0 and 1
   return(y)
 }
 
@@ -450,7 +450,7 @@ levy13 <- function(xx)
   term3 <- (x2-1)^2 * (1+(sin(2*pi*x2))^2)
   
   y <- term1 + term2 + term3
-  y <- (-y + 4.530203e+02)/ abs(4.530203e+02 - 1.349784e-31) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 4.530203e+02)/ abs(4.530203e+02 - 1.349784e-31) #convert to maximization problem and scale between 0 and 1
   return(y)
 }
 
@@ -494,7 +494,7 @@ rastr <- function(xx)
   sum <- sum(xx^2 - 10*cos(2*pi*xx))
   
   y <- 10*d + sum
-  y <- (-y + 80.70288)/ abs(80.70288 - 0) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 80.70288)/ abs(80.70288 - 0) #convert to maximization problem and scale between 0 and 1
   
   return(y)
 }
@@ -541,7 +541,7 @@ schaffer2 <- function(xx)
   fact2 <- (1 + 0.001*(x1^2+x2^2))^2
   
   y <- 0.5 + fact1/fact2
-  y <- (-y + 0.9968394)/ abs(0.9968394 - 0) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 0.9968394)/ abs(0.9968394 - 0) #convert to maximization problem and scale between 0 and 1
   
   
   return(y)
@@ -589,7 +589,7 @@ schaffer4 <- function(xx)
   fact2 <- (1 + 0.001*(x1^2+x2^2))^2
   
   y <- 0.5 + fact1/fact2
-  y <- (y - 0.5000939)/ abs(1.0000000 - 0.5000939) #ALREADY A MAXIMIZATION PROBLEM, scale between 0 and 1
+  #y <- (y - 0.5000939)/ abs(1.0000000 - 0.5000939) #ALREADY A MAXIMIZATION PROBLEM, scale between 0 and 1
   
   
   return(y)
@@ -635,7 +635,7 @@ schwef <- function(xx)
   sum <- sum(xx*sin(sqrt(abs(xx))))
   
   y <- 418.9829*d - sum
-  y <- (-y + 1.675931e+03)/ abs(1.675931e+03 - 2.719677e-04) #convert to maximization problem and scale between 0 and 1
+  #y <- (-y + 1.675931e+03)/ abs(1.675931e+03 - 2.719677e-04) #convert to maximization problem and scale between 0 and 1
   
   
   return(y)
