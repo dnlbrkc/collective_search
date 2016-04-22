@@ -1,0 +1,7 @@
+#OS junk
+*.DS_store
+[Tt]humbs.db
+
+#R files
+.Rhistory
+.Rapp.history
