@@ -122,6 +122,7 @@ setwd("NKlandscapes")
 for (k in kVec){
   env=n_envs + 1 + which(kVec==k) #increment counter
   #load pre-computed NK environments
+  k <- paste0("",k)
   setwd(k)
   landscapes <- list.files()
   total_NK <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix of performance over time
