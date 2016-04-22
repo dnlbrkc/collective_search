@@ -154,9 +154,10 @@ for (k in kVec){
       } else {#7. random search
         for (i in 2:tsteps){
             agents[[i]]<-indSearch(landscape, agents[[i-1]], RS= 1, NK = TRUE, n.agents = n.agents,  RAD = RAD, maxRange = maxRange, minRange=minRange)}  
-        }
       }
-    total_NK[,strat] <- total_NK[,strat] +  sapply(1:tsteps, function(x) mean(agents[[x]][,2])) #sum performance over all landscapes
+      total_NK[,strat] <- total_NK[,strat] +  sapply(1:tsteps, function(x) mean(agents[[x]][,2])) #sum performance over all landscapes
+      }
+   
   }
   total_NK <-  total_NK/length(landscapes) #average over number of landscapes
   for(strat in 1:length(strategies)){
