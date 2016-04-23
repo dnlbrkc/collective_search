@@ -27,7 +27,7 @@ for (env in 1:length(fitness)){#2D first
     mean <- toString(round(mean(fitness[[env]]), digits=2))
     statistics[env] <- paste(statistics[env], mean, sep=" & ") #concatenate to string
     #calculate variance
-    var <- toString(round(sd(fitness[[env]]), digits=2))
+    var <- toString(round(mean(fitness[[env]]), digits=2))
     statistics[env] <- paste(statistics[env], var, sep=" & ")
     #calculate modality
     mod <- 0
@@ -35,7 +35,7 @@ for (env in 1:length(fitness)){#2D first
         xloc <- addresses$x[i]
         yloc <- addresses$y[i]
         fit <- fitness[[env]][xloc,yloc]
-        neighbors <- ret[,i]
+        neighbors <- ret[,1]
         neighborFit <- sapply(neighbors, function(z) fitness[[env]][addresses$x[z], addresses$y[z]])#vector of neighboring fitness values
         bestFit <- max(neighborFit,na.rm=TRUE)
         if (bestFit<fit){
@@ -72,7 +72,6 @@ for (iter in 1:10000){
             mod_i <- mod_i+1
         }
     mod <- mod + mod_i
-    }
 }
 
 mean <- mean/10000
