@@ -23,10 +23,18 @@ for (i in 1:14){#loop through environments
 			fitnessMatrix[x,y] <- env(c(xloc,yloc))
 		}
 	}
+	#invert (convert to maximization problem)
+	if (i!=12){#note: Schaffer4 is already a maximization problem
+		fitnessMatrix <- fitnessMatrix * -1
+	}
+	#scale payoffs to between 0 and 1
+	fitnessMatrix<- (fitnessMatrix - min(fitnessMatrix))/(max(fitnessMatrix) - min(fitnessMatrix))
 	#add to output list
 	fitness[[i]] <- fitnessMatrix
 }
-#todo: add masonWatts function, which is not composed sequentially
+
 save(fitness, file="environments.Rdata")
 
 print(proc.time() - ptm)
+
+#todo: calculate environmental statistics
