@@ -20,7 +20,7 @@ setwd("..")
 #MODEL PARAMETERS
 #number of agents, trials, radius of local search, and sample size (for imitation)
 #n.agents=100; tsteps=200; RAD=30; samplesize <- 3 
-n.agents=100; tsteps=100; RAD=30; samplesize <- 3 
+n.agents=100; tsteps=100; RAD=3; samplesize <- 3 
 
 #list of 2D environments to loop through
 environmentList <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")
@@ -75,7 +75,7 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 env=n_envs+1 #env = 15 for Mason and Watts
 total <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix
 #loop through replications
-for(repM in 1:100){
+for(repM in 1:1){
   MasonWattsEnv <- MasonWatts(1001) #each different replication gets a different randomization of the environment
   agents <- list()
   choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
@@ -110,7 +110,7 @@ for(repM in 1:100){
   }
 }
 #calculate mean performance over time
-total <- total/100 #calculates averageover replications
+total <- total/1 #calculates averageover replications
 for(strat in 1:length(strategies)){
   output[,env,strat]<-total[,strat] #save to output array
 }
@@ -127,7 +127,7 @@ for (k in kVec){
   landscapes <- list.files()
   total_NK <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix of performance over time
   #loop through landscapes
-  for (l in landscapes){
+  for (l in landscapes[sample(1:100,1)]){
     load(l)#load landscape
     agents<-list()
     agents[[1]]<-landscape[sample(1:2^N,100,replace=F),]#sample initial starting points
