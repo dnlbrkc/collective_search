@@ -14,7 +14,7 @@ source("functions.R") #environment functions
 #load network matrices
 setwd("Networks")
 load("fullNet.Rdata")
-load("localNet.Rdata")
+load("localNet2.Rdata")
 setwd("..")
 
 #MODEL PARAMETERS
