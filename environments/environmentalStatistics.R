@@ -27,7 +27,7 @@ for (env in 1:length(fitness)){#2D first
     mean <- toString(round(mean(fitness[[env]]), digits=2))
     statistics[env] <- paste(statistics[env], mean, sep=" & ") #concatenate to string
     #calculate variance
-    var <- toString(round(mean(fitness[[env]]), digits=2))
+    var <- toString(round(sd(fitness[[env]]), digits=2))
     statistics[env] <- paste(statistics[env], var, sep=" & ")
     #calculate modality
     mod <- 0
