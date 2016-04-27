@@ -35,7 +35,7 @@ for (env in 1:length(fitness)){#2D first
         xloc <- addresses$x[i]
         yloc <- addresses$y[i]
         fit <- fitness[[env]][xloc,yloc]
-        neighbors <- ret[,1]
+        neighbors <- ret[,i]
         neighborFit <- sapply(neighbors, function(z) fitness[[env]][addresses$x[z], addresses$y[z]])#vector of neighboring fitness values
         bestFit <- max(neighborFit,na.rm=TRUE)
         if (bestFit<fit){
@@ -59,18 +59,19 @@ mod <- 0
 for (iter in 1:10000){
     MasonWattsEnv <- MasonWatts(1001) #initialize mason watts environment
     mean<- mean + mean(MasonWattsEnv)
-    var <- var + sd(MasonWatts)
+    var <- var + sd(MasonWattsEnv)
     mod_i <- 0
     for (i in 1:1002001){
         xloc <- addresses$x[i]
         yloc <- addresses$y[i]
         fit <- MasonWattsEnv[xloc,yloc]
-        neighbors <- ret[,1]
+        neighbors <- ret[,i]
         neighborFit <- sapply(neighbors, function(z) MasonWattsEnv[addresses$x[z], addresses$y[z]])#vector of neighboring fitness values
         bestFit <- max(neighborFit,na.rm=TRUE)
         if (bestFit<fit){
             mod_i <- mod_i+1
         }
+    }
     mod <- mod + mod_i
 }
 
