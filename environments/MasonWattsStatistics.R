@@ -46,7 +46,7 @@ for (iter in 1:MWrep){
 outputVec <- colMeans(output, na.rm=TRUE)
 
 #write file
-name<-paste0("MasonWatts", v,'.Rdata',sep="",collapse=NULL)
+name<-paste0("MasonWattsStats", v,'.Rdata',sep="",collapse=NULL)
 save(outputVec, file=name)
 
 
