@@ -1,38 +1,34 @@
 #Produce plots for all  environments
-
+#clear existing data
+rm(list=ls())
 #requirements
 library(plyr)
 library(ggplot2)
-theme_set(theme_bw(base_size=12))# use the black and white theme
+theme_set(theme_bw(base_size=12))# use the b&w theme
 library(reshape2)
 library(grid)
 library(gridExtra)
 require(plyr)
 require(rje)
 
-#clear existing data
-rm(list=ls())
 
+#WHICH RESULTS to use?
+resultsFile = "radius_3" #also used to save pdf
 
 #Factors
-environments <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert", "masonAndWatts", "N=20,K=5")
+environments <- c("Ackley", "Cross-in-Tray", "Drop-wave", "Eggholder", "Griewank", "Holder table", "Langermann", "Levy", "Levy n.13", "Rastrigin", "Schaffer n.2", "Schaffer n.4", "Schwefel", "Shubert", "Mason & Watts (2012)", "N=20,K=5")
+
+excludedEnvironments <- c("Levy", "Levy n.13")
 
 #load data
-load("ResultsApr21.Rdata")
+load(paste0(resultsFile,".Rdata", sep=""))
 
 #initialize empty dataframe
 df <- data.frame(time = integer(), model = character(), environment=character(), avg.Payoff=double())
 
 #Models
-models <- c("Imitate the Best", "Hybrid (rs=0,net=local)", "Hybrid (rs=0,net=full)","Hybrid (rs=.2,net=local)", "Hybrid (rs=.2,net=full)", "Local Search", "Random Search")
-modelOrder <- c(6,7,1,2,3,4,5)
-
-
-#parse the output data
-
-
-#average over all environments, if we want to plot that
-#test<- sapply(1:8,function(x) rowMeans(total[[x]]))
+models <- c("Imitate the Best", "Hybrid (rs=0,net=local)", "Hybrid (rs=0,net=full)","Hybrid (rs=.2,net=local)", "Hybrid (rs=.2,net=full)", "Local Search", "Random Search") #order saved from simulations
+modelOrder <- c(6,7,1,2,4,3,5) #order used in plots
 
 #1. loop through different model levels
 for (model_n in modelOrder){
@@ -54,7 +50,10 @@ for (model_n in modelOrder){
 
 
 df$model <- factor(df$model, models[modelOrder])
-p <- ggplot(df[df$time %in% c(1:100), ], aes(x = time, y = avg.Payoff, col = model, linetype = model)) + geom_line(lwd=0.6)  + ylim(0,1) + theme(legend.position="bottom") + guides(col = guide_legend(ncol = 3)) + facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = 2.8, r = -1.5 , hue=1.8, gamma = 1.6)) + labs(x = "Time Steps", y = "Average Payoff")
+#exclude environments
+df <- df[!(df$environment %in% excludedEnvironments),]
 
+p <- ggplot(df[df$time %in% seq(10,100,10),], aes(x = time, y = avg.Payoff, col = model)) + geom_line(lwd=0.3) + geom_point(aes(shape=model)) + scale_shape_manual(values = c(0,1,2,3,4,9,13))+ ylim(0,1)  +guides(colour = guide_legend("", ncol=3), shape = guide_legend("",ncol=3 ))+ facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = .5, r = -1.5 , hue=1.8, gamma = 1.8))+ labs(x = "Time Steps", y = "Average Payoff") +theme(legend.position="bottom",strip.background=element_blank(),legend.key=element_rect(color=NA))
 
-ggsave("allEnvironments.pdf", plot = p, height =10, width = 7, units = "in")
+outputFile <- paste0(resultsFile,".pdf", sep="")
+ggsave(outputFile, plot = p, height =10, width = 7, units = "in")
