@@ -28,7 +28,7 @@ df <- data.frame(time = integer(), model = character(), environment=character(),
 
 #Models
 models <- c("Imitate the Best", "Hybrid (rs=0,net=local)", "Hybrid (rs=0,net=full)","Hybrid (rs=.2,net=local)", "Hybrid (rs=.2,net=full)", "Local Search", "Random Search") #order saved from simulations
-modelOrder <- c(6,7,1,2,3,4,5) #order used in plots
+modelOrder <- c(6,7,1,2,4,3,5) #order used in plots
 
 #1. loop through different model levels
 for (model_n in modelOrder){
@@ -53,7 +53,7 @@ df$model <- factor(df$model, models[modelOrder])
 #exclude environments
 df <- df[!(df$environment %in% excludedEnvironments),]
 
-p <- ggplot(df[df$time %in% seq(10,100,10),], aes(x = time, y = avg.Payoff, col = model)) + geom_line(lwd=0.3) + geom_point(aes(shape=model)) + scale_shape_manual(values = c(0,1,2,3,13,4,9))+ ylim(0,1)  +guides(colour = guide_legend("", ncol=3), shape = guide_legend("",ncol=3))+ facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = .5, r = -1.5 , hue=1.8, gamma = 1.8))+ labs(x = "Time Steps", y = "Average Payoff") +theme(legend.position="bottom",strip.background=element_blank(),legend.key=element_rect(color=NA))
+p <- ggplot(df[df$time %in% seq(10,100,10),], aes(x = time, y = avg.Payoff, col = model)) + geom_line(lwd=0.3) + geom_point(aes(shape=model)) + scale_shape_manual(values = c(0,1,2,3,4,9,13))+ ylim(0,1)  +guides(colour = guide_legend("", ncol=3), shape = guide_legend("",ncol=3 ))+ facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = .5, r = -1.5 , hue=1.8, gamma = 1.8))+ labs(x = "Time Steps", y = "Average Payoff") +theme(legend.position="bottom",strip.background=element_blank(),legend.key=element_rect(color=NA))
 
 outputFile <- paste0(resultsFile,".pdf", sep="")
 ggsave(outputFile, plot = p, height =10, width = 7, units = "in")
