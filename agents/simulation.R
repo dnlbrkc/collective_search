@@ -9,7 +9,7 @@ source("strategies.R")
 #set working directory to "environments" to load fitness matrices
 setwd("..")
 setwd("environments")
-load("environments.Rdata")
+load("envenvironments_rescaled.Rdata")
 source("functions.R") #environment functions
 #load network matrices
 setwd("Networks")
@@ -75,7 +75,7 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 env=n_envs+1 #env = 15 for Mason and Watts
 total <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix
 #loop through replications
-for(repM in 1:100){
+for(repM in 1:1){
   MasonWattsEnv <- MasonWatts(1001) #each different replication gets a different randomization of the environment
   agents <- list()
   choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
@@ -127,7 +127,7 @@ for (k in kVec){
   landscapes <- list.files()
   total_NK <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix of performance over time
   #loop through landscapes
-  for (l in landscapes){
+  for (l in landscapes[1]){
     load(l)#load landscape
     agents<-list()
     agents[[1]]<-landscape[sample(1:2^N,100,replace=F),]#sample initial starting points
