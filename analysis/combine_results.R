@@ -1,4 +1,4 @@
-folder<- "resultsApr29"
+folder<- "resultsRescaled"
 
 setwd(folder)
 files <- list.files()
