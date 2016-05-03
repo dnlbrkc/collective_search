@@ -50,3 +50,14 @@ name<-paste0("MasonWattsStats", v,'.Rdata',sep="",collapse=NULL)
 save(outputVec, file=name)
 
 
+#analyze saved Rdata files
+setwd("MasonWattsStats")
+
+files <- list.files()
+stats <- matrix(ncol=3,nrow=length(files))
+for (n in 1:length(files)){
+    load(files[n])
+    stats[n,] <- outputVec
+
+}
+#calculate Mason and Watts statistics from pre-generated .Rdata files (see MasonWatts)

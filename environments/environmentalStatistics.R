@@ -47,3 +47,4 @@ for (env in 1:length(fitness)){#2D first
     statistics[env] <- paste(statistics[env], "\\ [0.5ex]", sep=" ")
     print(statistics[env])
 }
+
