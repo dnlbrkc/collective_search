@@ -13,12 +13,12 @@ require(rje)
 
 
 #WHICH RESULTS to use?
-resultsFile = "radius_3" #also used to save pdf
+resultsFile = "resultsRescaledMay4" #also used to save pdf
 
 #Factors
-environments <- c("Ackley", "Cross-in-Tray", "Drop-wave", "Eggholder", "Griewank", "Holder table", "Langermann", "Levy", "Levy n.13", "Rastrigin", "Schaffer n.2", "Schaffer n.4", "Schwefel", "Shubert", "Mason & Watts (2012)", "N=20,K=5")
+environments <- c("Ackley", "Cross-in-Tray", "Drop-wave", "Eggholder", "Griewank", "Holder table", "Langermann", "Levy", "Levy n.13", "Rastrigin", "Schaffer n.2", "Schaffer n.4", "Schwefel", "Shubert", "Mason & Watts (2012)", "N=20,K=5", "N=20,K=10", "N=20,K=16")
 
-excludedEnvironments <- c("Levy", "Levy n.13")
+excludedEnvironments <- c("Levy", "Levy n.13", "N=20,K=16")
 
 #load data
 load(paste0(resultsFile,".Rdata", sep=""))
@@ -53,7 +53,7 @@ df$model <- factor(df$model, models[modelOrder])
 #exclude environments
 df <- df[!(df$environment %in% excludedEnvironments),]
 
-p <- ggplot(df[df$time %in% seq(10,100,10),], aes(x = time, y = avg.Payoff, col = model)) + geom_line(lwd=0.3) + geom_point(aes(shape=model)) + scale_shape_manual(values = c(0,1,2,3,4,9,13))+ ylim(0,1)  +guides(colour = guide_legend("", ncol=3), shape = guide_legend("",ncol=3 ))+ facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = .5, r = -1.5 , hue=1.8, gamma = 1.8))+ labs(x = "Time Steps", y = "Average Payoff") +theme(legend.position="bottom",strip.background=element_blank(),legend.key=element_rect(color=NA))
+p <- ggplot(df[df$time %in% c(1, seq(10,100,10)),], aes(x = time, y = avg.Payoff, col = model)) + geom_line(lwd=0.3) + geom_point(aes(shape=model)) + scale_shape_manual(values = c(0,1,2,3,4,9,13))+ ylim(0,1)  +guides(colour = guide_legend("", ncol=3), shape = guide_legend("",ncol=3 ))+ facet_wrap(~ environment, ncol=3) + scale_colour_manual(values=cubeHelix(length(modelOrder)+1, start = .5, r = -1.5 , hue=1.8, gamma = 1.8))+ labs(x = "Time Steps", y = "Average Payoff") +theme(legend.position="bottom",strip.background=element_blank(),legend.key=element_rect(color=NA))
 
 outputFile <- paste0(resultsFile,".pdf", sep="")
-ggsave(outputFile, plot = p, height =10, width = 7, units = "in")
+ggsave(outputFile, plot = p, height =10, width = 8, units = "in")

@@ -1,8 +1,8 @@
-folder<- "resultsRescaled"
+folder<- "resultsOriginalMay4"
 
 setwd(folder)
 files <- list.files()
-total <- array(0,dim=c(100,17,7))
+total <- array(0,dim=c(100,18,7))
 for(f in files){
 	load(f)
 	total<- total + output
