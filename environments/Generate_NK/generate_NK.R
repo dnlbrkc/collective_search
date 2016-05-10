@@ -6,7 +6,7 @@ library(fGarch)
 
 
 N = 20
-K = 16
+K = 10
 
 r <- as.integer( commandArgs(TRUE)[1])
 
