@@ -50,16 +50,32 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 			#randomly draw a number to see if local or random search (TODO: Is there a faster way to avoid generating it if RS = 1 or 0?)
 			if (RS==0 | runif(1) > RS){ #local search
 				if (NK==FALSE){#2D environments
-					which.digit <- sample(c(1:2),1) #randomly sample one of the x or y values to modify
-					loc <- as.numeric(prevChoices[n,c(which.digit)]) #retrieve location of x or y from prevChoices for agent n
-					vec_radius <- 1:RAD #radius vector
-					values <- c(loc + vec_radius,loc - vec_radius) #range of possible locations within radius to choose from
-					#Important, wrap location values around edge of landscape (i.e., pacman)
-					values[values>maxRange] <- minRange:((minRange+length(values[values>maxRange]))-1)
-					values[values< minRange] <- ((maxRange-length(values[values<minRange]))+1):maxRange
-					newChoices[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
-					newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
-				}else{#NK
+				  temp <- prevChoices[n,]
+				  possibilities <- rbind(temp[1:2] + c( 1 ,1 ),
+				                         temp[1:2] + c(-1 , 1 ),
+				                         temp[1:2] + c(1 ,-1 ),
+				                         temp[1:2] + c(-1 ,-1 ),
+				                         temp[1:2] + c(0, 1 ),
+				                         temp[1:2] + c(1 ,0),
+				                         temp[1:2] + c(-1 ,0),
+				                         temp[1:2] + c(0,-1 ))
+				  for(p in 1:8){
+				    if(any(possibilities[p,1:2]>maxRange) || any(possibilities[p,1:2]<minRange)){
+				      possibilities[p,possibilities[p,1:2]<minRange] <- minRange
+				      possibilities[p,possibilities[p,1:2]>maxRange] <- maxRange
+				    }
+				  }
+				  payoffs <- sapply(1:nrow(possibilities), function(x) fitnessMatrix[possibilities[x,1], possibilities[x,2]]  )
+				  # choose <- possibilities[sample(1:nrow(possibilities),1),]
+				  new_options <- cbind(possibilities,payoffs)
+				  choose <- new_options[which.max(new_options[,3]),]
+				  
+				  newChoices[n,] <- choose #randomly choose one of the possible values, and re-adjust location in temp for agent
+				  
+				  
+				  
+				  
+				  	}else{#NK
 				newChoices[n,1] <- sample(store[,prevChoices[n,1]],1)+1 #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
 				newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
 				}
@@ -81,33 +97,51 @@ hybrid <- function(fitnessMatrix, prevChoices, network, NK=FALSE, RS = 0, RAD = 
 	return(newChoices)
 }
 
-indSearch <- function(fitnessMatrix, prevChoices, RS= 0, NK = FALSE, n.agents = 100, RAD = 30, maxRange = 1001, minRange=1){
+indSearch <- function(fitnessMatrix, prevChoices, RS= 0, NK = FALSE, n.agents = 100, RAD = 30, minRange=1,maxRange = 1001){
 	#RS = 0 is hill-climbing, RS = 1 is random search
 	if (NK==FALSE){#check if NK, because NK fitness matrices have 2 cols and 2D envs have 3 cols
 		payoff.id <- 3
 	}else{
 		payoff.id <- 2
 	}
+
 	newChoices <- prevChoices #copy prevChoices as newChoices for storing new iteration of solutions
 	#loop through agents
 	for (n in 1:n.agents){
 		#randomly draw a number to see if local or random search (TODO: Is there a faster way to avoid generating it if RS = 1 or 0?)
-		if (runif(1) > RS){ #local search
-			if (NK==FALSE){#2D environments
-				which.digit <- sample(c(1:2),1) #randomly sample one of the x or y values to modify
-				loc <- as.numeric(prevChoices[n,c(which.digit)]) #retrieve location of x or y from prevChoices for agent n
-				vec_radius <- 1:RAD #radius vector
-				values <- c(loc + vec_radius,loc - vec_radius) #range of possible locations within radius to choose from
-				#Important, wrap location values around edge of landscape (i.e., pacman)
-				values[values>maxRange] <- minRange:((minRange+length(values[values>maxRange]))-1)
-				values[values< minRange] <- ((maxRange-length(values[values<minRange]))+1):maxRange
-				newChoices[n,which.digit] <- sample(values,1) #randomly choose one of the possible values, and re-adjust location in temp for agent
-				newChoices[n,3] <- fitnessMatrix[newChoices[n,1],newChoices[n,2] ] #look up fitness
-			}else{#NK
-			newChoices[n,1] <- sample(store[,prevChoices[n,1]],1)+1 #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
-			newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
-			}
-		}
+	  if (RS==0 || runif(1) > RS){ #local search
+	    if (NK==FALSE){#2D environments
+	      temp <- prevChoices[n,]
+	      possibilities <- rbind(temp[1:2] + c( 1 ,1 ),
+	                             temp[1:2] + c(-1 , 1 ),
+	                             temp[1:2] + c(1 ,-1 ),
+	                             temp[1:2] + c(-1 ,-1 ),
+	                             temp[1:2] + c(0, 1 ),
+	                             temp[1:2] + c(1 ,0),
+	                             temp[1:2] + c(-1 ,0),
+	                             temp[1:2] + c(0,-1 ))
+	      for(p in 1:8){
+	        if(any(possibilities[p,1:2]>maxRange) || any(possibilities[p,1:2]<minRange)){
+	          possibilities[p,possibilities[p,1:2]<minRange] <- minRange
+	          possibilities[p,possibilities[p,1:2]>maxRange] <- maxRange
+	        }
+	      }
+	
+	      payoffs <- sapply(1:nrow(possibilities), function(x) fitnessMatrix[ possibilities[x,1], possibilities[x,2] ]  )
+	      # choose <- possibilities[sample(1:nrow(possibilities),1),]
+	      new_options <- cbind(possibilities,payoffs)
+	      choose <- unlist(new_options[which.max(new_options[,3]),])
+	     
+	      newChoices[n,1:2] <- as.vector(choose[1:2]) #randomly choose one of the possible values, and re-adjust location in temp for agent
+	      newChoices[n,3] <- as.vector(choose[3])
+	      
+	      
+	      
+	    }else{#NK
+	      newChoices[n,1] <- sample(store[,prevChoices[n,1]],1)+1 #sample neighboring solution (+1 is to compensate for decimal value of NK solution starting at 0)
+	      newChoices[n,2] <- fitnessMatrix[newChoices[n,1],2] #add fitness to new choices matrix
+	    }
+	  }
 		else{ #random search
 			if (NK==FALSE){ #2D environments
 				newChoices[n,1:2] <- sample(minRange:maxRange,2) #randomly generate an x,y value within range of function 

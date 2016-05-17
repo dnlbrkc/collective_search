@@ -20,14 +20,14 @@ setwd("..")
 #MODEL PARAMETERS
 #number of agents, trials, radius of local search, and sample size (for imitation)
 #n.agents=100; tsteps=200; RAD=30; samplesize <- 3 
-n.agents=100; tsteps=100; RAD=3; samplesize <- 3 
+n.agents=100; tsteps=100; RAD=30; samplesize <- 3 
 
 #list of 2D environments to loop through
 environmentList <- c("ackley", "crossit", "drop", "egg", "griewank", "holder", "langer", "levy", "levy13", "rastr", "schaffer2", "schaffer4", "schwef", "shubert")
 n_envs <- length(environmentList)
 minRange <- 1
 maxRange <- 1001
-kVec <- c("5","10","16") #K values to use in NK environments
+kVec <- c("5","10") #K values to use in NK environments
 #Model search strategies
 strategies <- c("Imitation", "hybridLocal", "hybridFull", "hybridLocalRand", "hybridFullRand", "hillClimbing", "Random")
 
@@ -71,12 +71,11 @@ for (env in 1:length(fitness)){ #loop through 2D landscapes
 }
 
 #B) Mason and Watts environment
-#TODO: either save randomization of environments, or pre-compute them (for calculating peaks, mu, and sigma)
 env=n_envs+1 #env = 15 for Mason and Watts
 total <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix
 #loop through replications
 for(repM in 1:100){
-  MasonWattsEnv <- MasonWatts(1001) #each different replication gets a different randomization of the environment
+  MasonWattsEnv <- MasonWatts(1001)^8 #each different replication gets a different randomization of the environment
   agents <- list()
   choices <- t(replicate(n.agents, sample(1001,2))) #random starting location
   payoffs<- apply(choices, 1, function(x) MasonWattsEnv[x[1],x[2]]) #look up payoff from fitness matrix
