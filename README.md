@@ -16,8 +16,8 @@ Social networks are stored in '/environments/Networks'
 
 ##Landscape files
 
-- Nk Landscapes can be generated using the file '/environments/Generate_NK/Generate_NK.R'
-- Functions for the 2D landscapes are stored in '/environments/function.R'
+- NK landscapes with custom N and K parameters can be generated using the file '/environments/Generate_NK/Generate_NK.R'
+- Functions for the 2D landscapes are stored in '/environments/functions.R'
 - Pre-generated payoffs for function-based 2D environments for a 1001x1001 grid are stored in '/environments/environments.Rdata'
 
 ##Citation
