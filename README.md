@@ -10,7 +10,7 @@ To run the simulation just open the file '/agents/simulation.R'
 
 Social networks are stored in '/environments/Networks'
 
-1. fullNet.Rdata : Fully connected networks with 100 nodes
+1. fullNet.Rdata : Fully connected network with 100 nodes
 
 2. localNet.Rdata: Locally connected lattice network with 100 nodes and a degree of 4.
 
