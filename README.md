@@ -8,7 +8,7 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 
 ## Network files
 
-- Social network are stored in /environments/Networks
+Social network are stored in /environments/Networks
 
 1. fullNet.Rdata : Fully connected networks with 100 nodes
 
