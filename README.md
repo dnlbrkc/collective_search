@@ -4,7 +4,7 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 
 ## Usage
 
-- To run the simulation just open the file '/agents/simulation.R'
+To run the simulation just open the file '/agents/simulation.R'
 
 ## Network files
 
