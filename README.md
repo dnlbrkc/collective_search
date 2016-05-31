@@ -1,6 +1,6 @@
 ## Background
 
-This package contains the code used in the simulations of Barkoczi, Analytis \& Wu (2016) Collective search on rugged landscapes: a cross-environmental analysis. \textit{Proceedings of the 38th Annual Conference of the Cognitive Science Society}
+This package contains the code used in the simulations of Barkoczi,D. Analytis,P.P., \& Wu, C (2016). Collective search on rugged landscapes: a cross-environmental analysis. Proceedings of the 38th Annual Conference of the Cognitive Science Society.
 
 ## Usage
 
@@ -11,7 +11,9 @@ This package contains the code used in the simulations of Barkoczi, Analytis \& 
 ## Network files
 
 - Social network are stored in /environments/Networks
+
 1. fullNet.Rdata : Fully connected networks with 100 nodes
+
 2. localNet.Rdata: Locally connected lattice network with 100 nodes and a degree of 4.
 
 #Landscape files
