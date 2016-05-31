@@ -8,8 +8,9 @@ The code is stored in separate folders.
 
 - Agents: this contains code for implementing the simulation and the functions used in the simulations
 
-1.strategies.R: Contains the functions that implement different individual and/or social learning strategies used in the main simulation.
-2.simulation.R: Contains the code for running the simulation.
+1. strategies.R: Contains the functions that implement different individual and/or social learning strategies used in the main simulation.
+
+2. simulation.R: Contains the code for running the simulation.
 
 
 - Analysis: contains code for analyzing the results and plotting the graphs.
