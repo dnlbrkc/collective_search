@@ -6,34 +6,34 @@ This package contains the code used in the simulations of Barkoczi, Analytis \& 
 
 The code is stored in separate folders.
 
-1. Agents: this contains code for implementing the simulation and the functions used in the simulations
+- Agents: this contains code for implementing the simulation and the functions used in the simulations
 
-strategies.R: Contains the functions that implement different individual and/or social learning strategies used in the main simulation.
-simulation.R: Contains the code for running the simulation.
-
-
-2. Analysis: contains code for analyzing the results and plotting the graphs.
-
-all_environments.R: Produces the main graph.
-
-combine_results.R: Combines the output of different simulation runs.
-
-modalityPayoffs.R: Calculates modality of the landscapes.
+1.strategies.R: Contains the functions that implement different individual and/or social learning strategies used in the main simulation.
+2.simulation.R: Contains the code for running the simulation.
 
 
-3.Environments:
+- Analysis: contains code for analyzing the results and plotting the graphs.
 
-environmentalStatistics.R:
+1. all_environments.R: Produces the main graph.
 
-fitnessMatrix.R
+2. combine_results.R: Combines the output of different simulation runs.
 
-functions.R
+3. modalityPayoffs.R: Calculates modality of the landscapes.
 
-MasonWattsStatistics.R: Calculates environmental properties for the Mason and Watts environment.
 
-maxMinEnv.R:
+- Environments:
 
-payoffHistograms.R:
+1. environmentalStatistics.R:
+
+2. fitnessMatrix.R
+
+3. functions.R
+
+4. MasonWattsStatistics.R: Calculates environmental properties for the Mason and Watts environment.
+
+5. maxMinEnv.R:
+
+6. payoffHistograms.R:
 
 - Generate_NK: contains code for generating NK landscapes
 
