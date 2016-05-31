@@ -43,6 +43,6 @@ payoffHistograms.R:
 
 ## Usage
 
-- To run the simulation just open the file /agents/simulation.R
-- To generate the NK landscapes open /environments/Generate_NK/generate_NK.R
-- 
+- To run the simulation just open the file '/agents/simulation.R'
+- To generate the NK landscapes open '/environments/Generate_NK/generate_NK.R'
+
