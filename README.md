@@ -3,7 +3,8 @@
 This package contains the code used in the simulations of Barkoczi, Analytis and Wu (2016).
 
 ## Usage
-1. Generate the environments used in the simulations
+
+# Generate the environments used in the simulations
 
 - Fitness matrices for Function-based environments (#1-12) are generated using '/environments/fitnessMatrix.R'
 
