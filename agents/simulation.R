@@ -117,7 +117,7 @@ for(strat in 1:length(strategies)){
 #C) NK environments
 N=20
 load("NKNeighbors.Rdata") #matrix storing all one digit neighbors for each NK solution (specifically for N=20)
-setwd("NKlandscapes")
+setwd("NKlandscapes") #Folder containing NK environments, separated by subfolders for specific values of K (data generated with '/environments/Generate_NK/generate_NK.R')
 #loop through different NK environments with different K values
 for (k in kVec){
   env=n_envs + 1 + which(kVec==k) #increment counter

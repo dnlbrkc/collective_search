@@ -3,6 +3,7 @@ source("generate_landscape.R")
 library(gtools)
 library(fGarch)
 
+
 #Specify NK parameters
 N = 20
 K = 10
@@ -31,6 +32,14 @@ landscape[,N+1]<-(landscape[,N+1]/max(landscape[,N+1]))^8
 #replace solutions Ids with integers
 landscape<-cbind(0:(nrow(landscape)-1),landscape[,N+1])
 
+#Move to '/environments/NKlandscapes' folder
+setwd(".."); setwd("NKlandscapes")
+#Move into folder named after K value
+setwd(paste0("",K))
+
 #save output
-name<-paste0("LANDSCAPE",r,'.Rdata',sep="",collapse=NULL)
+name<-paste0("N=20,K=",K,"_",r,'.Rdata',sep="",collapse=NULL)
 save(landscape, file=name)
+
+#Move back into current directory
+setwd(".."); setwd(".."); setwd("Generate_NK")
