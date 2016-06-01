@@ -5,11 +5,11 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 ## Usage
 1. Generate the environments used in the simulations
 
-1.a. Fitness matrices for Function-based environments (#1-12) are generated using '/environments/fitnessMatrix.R'
+- Fitness matrices for Function-based environments (#1-12) are generated using '/environments/fitnessMatrix.R'
 
-1.b. The Mason and Watts (2012) environment (#13) is generated on the fly in the simulation code. The payoff function can be found in '/environments/functions.R' at the bottom
+-  The Mason and Watts (2012) environment (#13) is generated on the fly in the simulation code. The payoff function can be found in '/environments/functions.R' at the bottom
 
-1.c. NK environments with custom N and K parameters can be generated using the file '/environments/Generate_NK/generate_NK.R'. For our purposes, we generated 100 replications of N=20,K=5 and for N=20,K=10.
+-  NK environments with custom N and K parameters can be generated using the file '/environments/Generate_NK/generate_NK.R'. For our purposes, we generated 100 replications of N=20,K=5 and for N=20,K=10.
 
 2. Generate the social network data using '/environments/Networks/networks.R'
 
