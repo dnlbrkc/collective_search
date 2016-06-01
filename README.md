@@ -4,7 +4,7 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 
 ## Usage
 1. Generate the environments used in the simulations
-2. 
+
 1.a. Fitness matrices for Function-based environments (#1-12) are generated using '/environments/fitnessMatrix.R'
 
 1.b. The Mason and Watts (2012) environment (#13) is generated on the fly in the simulation code. The payoff function can be found in '/environments/functions.R' at the bottom
