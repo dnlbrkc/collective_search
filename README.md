@@ -3,22 +3,15 @@
 This package contains the code used in the simulations of Barkoczi, Analytis and Wu (2016).
 
 ## Usage
+1. Generate the environments used in the simulations
+1.a. Fitness matrices for Function-based environments (#1-12) are generated using '/environments/fitnessMatrix.R'
+1.b. The Mason and Watts (2012) environment (#13) is generated on the fly in the simulation code. The payoff function can be found in '/environments/functions.R' at the bottom
+1.c. NK environments with custom N and K parameters can be generated using the file '/environments/Generate_NK/generate_NK.R'. For our purposes, we generated 100 replications of N=20,K=5 and for N=20,K=10.
 
-To run the simulation just open the file '/agents/simulation.R'
+2. Generate the social network data {DANIEL UPDATE}
 
-## Network files
+3. The simulation can be run using the file '/agents/simulation.R'. Model strategies can be found in '/agents/strategies.R'
 
-Social networks are stored in '/environments/Networks'
-
-1. fullNet.Rdata : Fully connected network with 100 nodes
-
-2. localNet.Rdata: Locally connected lattice network with 100 nodes and a degree of 4.
-
-##Landscape files
-
-- NK landscapes with custom N and K parameters can be generated using the file '/environments/Generate_NK/Generate_NK.R'
-- Functions for the 2D landscapes are stored in '/environments/functions.R'
-- Pre-generated payoffs for function-based 2D environments for a 1001x1001 grid are stored in '/environments/environments.Rdata'
 
 ##Citation
 
