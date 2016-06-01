@@ -14,12 +14,15 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 
 ## Social Networks
 
-1. Social network data is generated using '/environments/Networks/networks.R'
+- Social network data is generated using '/environments/Networks/networks.R'
 
 ## Agent Simulations
-1. The simulation can be run using the file '/agents/simulation.R'. Model strategies can be found in '/agents/strategies.R'
+- The simulation can be run using the file '/agents/simulation.R'. 
+- Model strategies used in simulation.R are sourced from '/agents/strategies.R'
+- Network data is loaded from '/environments/Networks/networks.R'
+- The output has averaged payoffs over the specified time steps for a population of 100 agents, across each environment
 
 
 # Citation
 
-Barkoczi,D. Analytis,P.P., \& Wu, M.C. (2016). Collective search on rugged landscapes: a cross-environmental analysis. Proceedings of the 38th Annual Conference of the Cognitive Science Society.
+Barkoczi, D. Analytis, P.P., \& Wu, M.C. (2016). Collective search on rugged landscapes: a cross-environmental analysis. Proceedings of the 38th Annual Conference of the Cognitive Science Society.
