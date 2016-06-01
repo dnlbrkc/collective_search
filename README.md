@@ -11,7 +11,6 @@ This package contains the code used in the simulations of Barkoczi, Analytis and
 
 -  NK environments with custom N and K parameters can be generated using the file '/environments/Generate_NK/generate_NK.R'. For our purposes, we generated 100 replications of N=20,K=5 and for N=20,K=10.
 
-
 2. Generate the social network data using '/environments/Networks/networks.R'
 
 3. The simulation can be run using the file '/agents/simulation.R'. Model strategies can be found in '/agents/strategies.R'
