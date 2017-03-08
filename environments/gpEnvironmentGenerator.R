@@ -67,3 +67,4 @@ grid <- expand.grid(replicate(dimensions, seq(xLength), simplify=FALSE))
 
 #sample environments from 
 Envs <- mvrnorm(n = n_envs, mu = rep(0,xLength^dimensions), kernelFun(grid,grid,lambda,signalVariance,noiseVariance))
+g
