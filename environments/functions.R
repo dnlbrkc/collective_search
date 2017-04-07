@@ -754,40 +754,37 @@ nk <- function(xx){
 
 #environment from Mason & Watts (2012)
 library(akima)
-MasonWatts<-function(L){ #L specifies the size of the output matrix, which is L x L
-  #Parameters specified in Mason & Watts (2012)
-  R <- 3 
+
+MasonWatts<-function(L){
+  R <- 3 * (L/100) #variance term
   rho <- 0.7
   #1. create function matrix as a unimodal bivariate Gaussian with the mean randomly chosen, with variance R
-  #generate two univariate Gaussians
-  X <- dnorm(seq(1,100), mean = runif(1,1,100), sd=sqrt(R))
-  Y <- dnorm(seq(1,100), mean = runif(1,1,100), sd=sqrt(R))
-  #Bivariate Gaussian is the product of the two univariate Gaussians
+  #generate two random means
+  X <- dnorm(seq(1,L), mean = runif(1,1,L), sd=sqrt(R))
+  Y <- dnorm(seq(1,L), mean = runif(1,1,L), sd=sqrt(R))
   fitnessMatrix <- X %*% t(Y)
   #scale to between 0 and 1 (Not sure if this is what they do)
   fitnessMatrix <- fitnessMatrix * (1/max(fitnessMatrix))
   #2. compute psuedorandom Perlin noise
-  #2a loop through octaves
+  #2a loop through octaves and randomly draw values
   for (omega in 3:7){
-    octave <- 2^omega  
-    #create a smaller matrix of size octave x octave, containing  randomly assigned payoffs 
+    octave <- 2^omega  #scale octave to account for grids larger than original 100x100
+    #create a smaller matrix, containing only randomly assigned payoffs corresponding to the cells affected by the octave
     octaveMatrix <- matrix(runif(octave^2),ncol=octave, nrow=octave)
-    #X or Y mapping of octave sequence 
-    octaveSeq <- seq(1,100, length.out=octave)
-    #2b. smooth values of all cell values using bicubic interpolation; i.e., blow up octave x octave matrix into a 100 x 100 matrix 
-    octaveMatrix <- bicubic.grid(octaveSeq, octaveSeq, octaveMatrix, c(1,100), c(1,100),1,1) 
+    #center octave sequence on median of grid
+    octaveSeq <- seq(1,L, length.out=octave)
+    #2b. smooth values of all cell values using bicubic interpolation
+    octaveMatrix <- bicubic.grid(octaveSeq, octaveSeq, octaveMatrix, c(1,L), c(1,L),dx=1,dy=1) 
     #2c. scale matrix by the persistence paramter  
     octaveMatrix <- octaveMatrix$z * rho^omega
     #3. sum together
     fitnessMatrix <- fitnessMatrix + octaveMatrix
   }
-  #3 continued... transform to L x L grid using bicubic interpolation
-  fitnessMatrix <- bicubic.grid(seq(1,L,length.out=100), seq(1,L,length.out=100), fitnessMatrix, c(1,L), c(1,L),1,1) 
-  fitnessMatrix <- fitnessMatrix$z
-  #...scale fitnessMatrix to between 0 and 1
-  fitnessMatrix <- fitnessMatrix * (1/max(fitnessMatrix))
-  #....exponential rescaling
-  fitnessMatrix <- fitnessMatrix^8
-
+  #3 continued... scale fitnessMatrix to between 1 and 100
+  fitnessMatrix <- fitnessMatrix * (100/max(fitnessMatrix))
+  
   return(fitnessMatrix)
+  #3D plotting example
+  #https://cran.r-project.org/web/packages/plot3D/vignettes/volcano.pdf
+  #persp3D(z = test, clab = "m")
 }

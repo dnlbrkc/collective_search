@@ -1,7 +1,9 @@
 #Generates fitness matrices for environments 1-12 from the paper
+library(rprojroot)
+path <- function(x) rprojroot::find_root_file(x, criterion = has_file("collective_search.Rproj"))
 
-source("envRange.R") #retrieves original range of function
-source("functions.R") #retrieves payoff function
+source(path("environments/envRange.R")) #retrieves original range of function
+source(path("environments/functions.R")) #retrieves payoff function
 
 #Environment list. Note. Some environments were excluded in the final analysis
 envList <- c(ackley, crossit, drop, egg, griewank, holder, langer, levy, levy13, rastr, schaffer2, schaffer4, schwef, shubert)
@@ -14,7 +16,7 @@ for (i in 1:14){#loop through environments
 	env<- envList[[i]]
 	envRange <- rangeList[[i]]
 	envName <- envNames[[i]]
-	fitnessMatrix <- matrix(, ncol=1001, nrow =1001)
+	fitnessMatrix <- matrix(NA, ncol=1001, nrow =1001)
 	#loop through 1:1000 for x and y
 	for (x in 1:1001){
 		for (y in 1:1001){
@@ -36,4 +38,4 @@ for (i in 1:14){#loop through environments
 }
 
 #Save output
-save(fitness, file="environments.Rdata")
+save(fitness, file=path("environments/environments.Rdata"))

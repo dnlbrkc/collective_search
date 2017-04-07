@@ -1,21 +1,22 @@
 #used to run the simulations in Barkoczi, Analytis, & Wu (2016)
-
+library(rprojroot)
 #replication ID for cluster computing
 v <- as.integer(commandArgs(TRUE)[1])
 
+path <- function(x) rprojroot::find_root_file(x, criterion = has_file("collective_search.Rproj"))
+
+
+
 #Load pre-computed data
 #load strategies
-source("strategies.R") # the source of the various agent model functions
-#set working directory to "environments" to load fitness matrices
-setwd("..")
-setwd("environments")
-load("environments.Rdata") #computed using /environments/fitnessMatrix.R
-source("functions.R") #environment functions (loaded only for the MasonWatts() function)
+source(path("agents/strategies.R")) # the source of the various agent model functions
+load(path("environments/environments.Rdata")) #computed using /environments/fitnessMatrix.R
+source(path("environments/functions.R")) #environment functions (loaded only for the MasonWatts() function)
 #load network matrices
-setwd("Networks")
-load("fullNet.Rdata")
-load("localNet.Rdata")
-setwd("..")
+
+load(path("environments/Networks/fullNet.Rdata"))
+load(path("environments/Networks/localNet.Rdata"))
+
 
 #MODEL PARAMETERS
 n.agents=100; tsteps=100; samplesize <- 3 
@@ -116,14 +117,14 @@ for(strat in 1:length(strategies)){
 
 #C) NK environments
 N=20
-load("NKNeighbors.Rdata") #matrix storing all one digit neighbors for each NK solution (specifically for N=20)
+load(path("environments/NKNeighbors.Rdata")) #matrix storing all one digit neighbors for each NK solution (specifically for N=20)
 setwd("NKlandscapes") #Folder containing NK environments, separated by subfolders for specific values of K (data generated with '/environments/Generate_NK/generate_NK.R')
 #loop through different NK environments with different K values
 for (k in kVec){
   env=n_envs + 1 + which(kVec==k) #increment counter
   #load pre-computed NK environments
-  k <- paste0("",k)
-  setwd(k)
+  wd <- paste0(path("environments/NK_landscapes/"),"",k)
+  setwd(wd)
   landscapes <- list.files()
   total_NK <- matrix(0,ncol=length(strategies),nrow=tsteps) #output matrix of performance over time
   #loop through landscapes
@@ -163,11 +164,9 @@ for (k in kVec){
   for(strat in 1:length(strategies)){
     output[,env,strat] <- total_NK[,strat]
   }
-  setwd("..") #jump back out to "/NKlandscapes" folder
 }
 
-#Save results and move back to original code folder
-setwd(".."); setwd(".."); setwd("analysis")
+#Save results
+setwd(path("results"))
 name<-paste0(v,'.Rdata',sep="",collapse=NULL)
 save(output, file=name)
-setwd(".."); setwd("agents")
